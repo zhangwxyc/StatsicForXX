@@ -16,19 +16,80 @@ namespace ConsoleApplication1
             var dt = NPOIHelper.ImportExceltoDt(path, 0, 0);
             var infos = Common.DTToList<BaseDataInfo>(dt);
             int index = 1;
-            index = Total(infos, index);
+            //index = Total(infos, index);
 
-            infos.Select(x => new {
-                a0 = 0,
-                a1=x.工号,
-                a2=x.姓名,
-                a3=x.平均得分,
-                a4=x.
-            });
+           var t3= GetT3(infos, "北京1组");
 
             var list = infos.GroupBy(x => x.技能组).ToDictionary(x => x.Key, x => x.ToList());
-            T1(list);
+            list.Select(x => x.Key);
+            //T1(list);
         }
+
+        private static object GetT3(List<BaseDataInfo> infos, string groups)
+        {
+            var t3 = infos.Where(x => FilterGroup(x, groups))
+                             .Select(x => new
+                             {
+                                 a0 = 0,
+                                 a1 = x.工号,
+                                 a2 = x.姓名,
+                                 a3 = x.平均得分,
+                                 a4 = GetPassRate(x),
+                                 a5 = GetSI(x),
+                                 a6 = GetEvalRate(x),
+                                 a7 = GetJSI(x),
+                                 a8 = GetYu(x)
+                             })
+                         .OrderByDescending(x => x.a3)
+                         .ThenByDescending(x => x.a4)
+                         .ThenByDescending(x => x.a5)
+                         .ThenByDescending(x => x.a6)
+                         .ThenByDescending(x => x.a7)
+                         .ThenByDescending(x => x.a8)
+                         .ToList()
+                         ;
+            return t3;
+        }
+
+        private static bool FilterGroup(BaseDataInfo x, string groups)
+        {
+            if (x == null || string.IsNullOrWhiteSpace(groups)||string.IsNullOrEmpty(x.工号))
+            {
+                return false;
+            }
+
+            return groups.Split(',').ToList().Contains(x.技能组);
+        }
+
+        private static bool FilterGroup(BaseDataInfo x)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private static string GetEvalRate(BaseDataInfo x)
+        {
+            return x.客户评价率;
+        }
+
+        private static string GetPassRate(BaseDataInfo x)
+        {
+            return x.通过率;
+        }
+        private static string GetSI(BaseDataInfo x)
+        {
+            return x.客户满意度;
+        }
+        private static string GetJSI(BaseDataInfo x)
+        {
+            return x.净满意度;
+        }
+        private static string GetYu(BaseDataInfo x)
+        {
+            return "";
+        }
+
+
 
         private static int Total(List<BaseDataInfo> infos, int index)
         {

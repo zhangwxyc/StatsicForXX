@@ -28,12 +28,46 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.btnLoad = new System.Windows.Forms.Button();
+            this.tbPath = new System.Windows.Forms.TextBox();
+            this.SuspendLayout();
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.Location = new System.Drawing.Point(187, 123);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(62, 23);
+            this.btnLoad.TabIndex = 0;
+            this.btnLoad.Text = "OK";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            // 
+            // tbPath
+            // 
+            this.tbPath.Location = new System.Drawing.Point(22, 36);
+            this.tbPath.Name = "tbPath";
+            this.tbPath.Size = new System.Drawing.Size(191, 21);
+            this.tbPath.TabIndex = 1;
+            this.tbPath.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tbPath_MouseDoubleClick);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.tbPath);
+            this.Controls.Add(this.btnLoad);
+            this.Name = "Form1";
             this.Text = "Form1";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Button btnLoad;
+        private System.Windows.Forms.TextBox tbPath;
     }
 }
 
