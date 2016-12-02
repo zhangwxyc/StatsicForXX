@@ -26,7 +26,7 @@ namespace StatsisLib
         {
             List<MappInfo> result = new List<MappInfo>();
             XmlSerializer serializer = new XmlSerializer(typeof(List<MappInfo>));
-            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 result = serializer.Deserialize(fs) as List<MappInfo>;
             }

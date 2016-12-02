@@ -101,7 +101,7 @@ namespace StatsicForXX
                 string name = item.Name;
                 if (string.IsNullOrWhiteSpace(item.NickName))
                 {
-                    name = string.Format("{0}({1})", item.Name, item.NickName);
+                    name = string.Format("{0}{1}", item.Name, "--"+item.NickName);
                 }
                 var chiildNode = new TreeNode() { Text = name, Tag = item };
                 node.Nodes.Add(chiildNode);
@@ -157,6 +157,10 @@ namespace StatsicForXX
 
 
             string mapPath = GetMapPath();
+            if (File.Exists(mapPath))
+            {
+                File.Move(mapPath, string.Format("{0}_{1}.bak", mapPath, DateTime.Now.ToString().Replace(":", "_").Replace("-", "_")));
+            }
             mapperInfos.Clear();
             foreach (ListViewItem item in lv_groups.Items)
             {

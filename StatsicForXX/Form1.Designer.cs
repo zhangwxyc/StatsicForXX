@@ -30,6 +30,7 @@
         {
             this.btnLoad = new System.Windows.Forms.Button();
             this.tbPath = new System.Windows.Forms.TextBox();
+            this.btn_Go = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnLoad
@@ -50,11 +51,22 @@
             this.tbPath.TabIndex = 1;
             this.tbPath.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tbPath_MouseDoubleClick);
             // 
+            // btn_Go
+            // 
+            this.btn_Go.Location = new System.Drawing.Point(85, 154);
+            this.btn_Go.Name = "btn_Go";
+            this.btn_Go.Size = new System.Drawing.Size(75, 23);
+            this.btn_Go.TabIndex = 2;
+            this.btn_Go.Text = "button1";
+            this.btn_Go.UseVisualStyleBackColor = true;
+            this.btn_Go.Click += new System.EventHandler(this.btn_Go_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.btn_Go);
             this.Controls.Add(this.tbPath);
             this.Controls.Add(this.btnLoad);
             this.Name = "Form1";
@@ -68,6 +80,7 @@
 
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.TextBox tbPath;
+        private System.Windows.Forms.Button btn_Go;
     }
 }
 

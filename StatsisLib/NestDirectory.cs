@@ -25,6 +25,27 @@ namespace StatsisLib
         {
             Children = new List<NestDirectory>();
         }
+        public string GetChildrenNames(bool isNest = false)
+        {
+            List<string> nameList = new List<string>();
+            GetChildrenNameList(this, nameList, isNest);
+            return nameList.Aggregate((x, y) => x +","+ y).ToString().TrimEnd(',');
+        }
+        private static void GetChildrenNameList(NestDirectory dir, List<string> nameList,bool isNest=false)
+        {
+            foreach (var item in dir.Children)
+            {
+                if (isNest)
+                {
+                    GetChildrenNameList(item, nameList, isNest);
+                }
+                if (nameList.Contains(item.Name))
+                {
+                    continue;
+                }
+            }
+        }
+
         public void Serialize(string path)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(NestDirectory));
@@ -37,7 +58,7 @@ namespace StatsisLib
         {
             NestDirectory result = null;
             XmlSerializer serializer = new XmlSerializer(typeof(NestDirectory));
-            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 result=serializer.Deserialize(fs) as NestDirectory;
             }

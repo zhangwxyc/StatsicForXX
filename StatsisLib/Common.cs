@@ -29,6 +29,48 @@ namespace StatsisLib
             }
             return dt;
         }
+        public static DataTable ListToDataTable<T>(List<T> infoList, List<string> cols, bool needIndex = true)
+        {
+            DataTable dt = new DataTable();
+            string indexName = "名次";
+            if (needIndex)
+            {
+                dt.Columns.Add(indexName);
+            }
+            List<PropertyInfo> pInfos = new List<PropertyInfo>();
+            foreach (var colItem in cols)
+            {
+                dt.Columns.Add(colItem);
+                var propInfo = typeof(T).GetProperty(colItem);
+                if (propInfo != null)
+                {
+                    pInfos.Add(propInfo);
+                }
+            }
+            int index = 1;
+
+            foreach (var info in infoList)
+            {
+                DataRow dr = dt.NewRow();
+                if (needIndex)
+                {
+                    dr[indexName] = index++;
+                }
+                foreach (var propItem in pInfos)
+                {
+                    object o = propItem.GetValue(info);
+                    if (propItem.PropertyType.Name == "Decimal")
+                    {
+                        o = Decimal.Parse(o.ToString()).ToString("f2");
+                    }
+
+                    dr[propItem.Name] =o;
+                }
+                dt.Rows.Add(dr);
+            }
+            return dt;
+        }
+
         public static List<T> DTToList<T>(DataTable dt)
         {
             if (dt == null)
@@ -83,6 +125,11 @@ namespace StatsisLib
                 list.Add(info);
             }
             return list;
+        }
+
+        public static string GetConfig(string key)
+        {
+            return System.Configuration.ConfigurationManager.AppSettings[key];
         }
     }
 }
