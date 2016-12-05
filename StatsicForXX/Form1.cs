@@ -121,12 +121,13 @@ namespace StatsicForXX
                 DataProcess.T1(DestInfos),
                 DataProcess.T2(DestInfos),
                 DataProcess.T3(DestInfos),
-                DataProcess.T4(DestInfos)
+                DataProcess.T4(DestInfos),
+                DataProcess.T5(DestInfos)
             };
             int index = 1;
             ds.ForEach(x => x.TableName = (index++).ToString());
             NPOIHelper.ExportSimple(ds, "C:\\1q.xlsx");
-
+            MessageBox.Show("导出完成");
 
         }
 

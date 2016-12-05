@@ -170,7 +170,7 @@ namespace StatsisLib
         {
             string groups = Common.GetConfig("All");
             var sList = list.Where(x => FilterGroup(x,groups)).ToList();
-            var dt = T0(sList,"T5");
+            var dt = T0(sList,"T4");
             return dt;
         }
 

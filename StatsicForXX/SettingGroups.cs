@@ -171,6 +171,7 @@ namespace StatsicForXX
                 }
             }
             MappInfo.Serialize(mapPath, mapperInfos);
+            MessageBox.Show("操作完成");
         }
 
         private string GetMapPath()
@@ -472,6 +473,7 @@ namespace StatsicForXX
                 str.AppendFormat("{0},", item.Text);
             }
             Clipboard.SetText(str.ToString().TrimEnd(','));
+            MessageBox.Show("已复制");
         }
     }
 }

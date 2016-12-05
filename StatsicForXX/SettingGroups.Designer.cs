@@ -74,7 +74,7 @@
             this.toolStripSeparator2,
             this.tv_m_Copy});
             this.tv_m.Name = "tv_m";
-            this.tv_m.Size = new System.Drawing.Size(153, 170);
+            this.tv_m.Size = new System.Drawing.Size(113, 148);
             // 
             // tv_m_Add
             // 
@@ -123,7 +123,7 @@
             this.lv_groups.LabelEdit = true;
             this.lv_groups.Location = new System.Drawing.Point(314, 12);
             this.lv_groups.Name = "lv_groups";
-            this.lv_groups.Size = new System.Drawing.Size(141, 195);
+            this.lv_groups.Size = new System.Drawing.Size(141, 315);
             this.lv_groups.TabIndex = 1;
             this.lv_groups.UseCompatibleStateImageBehavior = false;
             this.lv_groups.View = System.Windows.Forms.View.Tile;
@@ -154,9 +154,10 @@
             // 
             // btn_Save
             // 
-            this.btn_Save.Location = new System.Drawing.Point(338, 311);
+            this.btn_Save.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btn_Save.Location = new System.Drawing.Point(314, 364);
             this.btn_Save.Name = "btn_Save";
-            this.btn_Save.Size = new System.Drawing.Size(95, 100);
+            this.btn_Save.Size = new System.Drawing.Size(141, 56);
             this.btn_Save.TabIndex = 4;
             this.btn_Save.Text = "Save";
             this.btn_Save.UseVisualStyleBackColor = true;
