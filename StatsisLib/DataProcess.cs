@@ -124,34 +124,38 @@ namespace StatsisLib
             throw new NotImplementedException();
         }
 
-        public static void T1(List<BaseDataInfo> list)
+        public static DataTable T1(List<BaseDataInfo> list)
         {
             var sumLines = SumLine(list);
             Compute(sumLines);
             var resultData = sumLines.OrderByDescending(x => x.平均得分).ThenByDescending(x => x.通过率).ToList();
             var dt = Common.ListToDataTable<BaseDataInfo>(resultData, Common.GetConfig("T1").Split(',').ToList(), false);
+            return dt;
         }
 
-        public static void T2(List<BaseDataInfo> list)
+        public static DataTable T2(List<BaseDataInfo> list)
         {
             string groups = Common.GetConfig("VIP");
             var subList = list.Where(x => FilterGroup(x, groups)).ToList();
             Compute(subList);
             var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), false);
+            return dt;
         }
 
-        public static void T3(List<BaseDataInfo> list)
+        public static DataTable T3(List<BaseDataInfo> list)
         {
             var subList = list.Where(x => x.IsNew).ToList();
             Compute(subList);
             var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T3").Split(',').ToList(), false);
+            return dt;
         }
-        public static void T4(List<BaseDataInfo> list)
+        public static DataTable T4(List<BaseDataInfo> list)
         {
             string tableHeader = "T2";
 
             var subList = list.Where(x => !x.IsNew).ToList();
             var dt = T0(subList, tableHeader);
+            return dt;
         }
 
         private static DataTable T0(List<BaseDataInfo> subList, string tableHeader)
@@ -162,11 +166,12 @@ namespace StatsisLib
             return dt;
         }
 
-        public static void T5(List<BaseDataInfo> list)
+        public static DataTable T5(List<BaseDataInfo> list)
         {
             string groups = Common.GetConfig("All");
             var sList = list.Where(x => FilterGroup(x,groups)).ToList();
             var dt = T0(sList,"T5");
+            return dt;
         }
 
 

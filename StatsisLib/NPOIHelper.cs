@@ -406,6 +406,73 @@ namespace StatsisLib
             fs.Close();
         }
 
+        public static void ExportSimple(List<DataTable> dts, string path)
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            foreach (var dt in dts)
+            {
+                XSSFSheet sheet = workbook.CreateSheet(dt.TableName) as XSSFSheet;
+
+                #region 根据表头和内容算列宽
+                int[] arrColWidth = new int[dt.Columns.Count];
+                foreach (DataColumn item in dt.Columns)
+                {
+                    arrColWidth[item.Ordinal] = Encoding.GetEncoding(936).GetBytes(item.ColumnName.ToString()).Length;
+                }
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dt.Columns.Count; j++)
+                    {
+                        int intTemp = Encoding.GetEncoding(936).GetBytes(dt.Rows[i][j].ToString()).Length;
+                        if (intTemp > arrColWidth[j])
+                        {
+                            arrColWidth[j] = intTemp;
+                        }
+                    }
+                }
+                #endregion
+
+                //填充表头
+                XSSFRow dataRow = sheet.CreateRow(0) as XSSFRow;
+                foreach (DataColumn column in dt.Columns)
+                {
+                    dataRow.CreateCell(column.Ordinal).SetCellValue(column.ColumnName);
+
+                    XSSFCellStyle headStyle = workbook.CreateCellStyle() as XSSFCellStyle;
+                    headStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.CenterSelection;
+                    XSSFFont font = workbook.CreateFont() as XSSFFont;
+                    font.FontHeightInPoints = 10;
+                    font.Boldweight = 700;
+                    headStyle.SetFont(font);
+
+                    dataRow.GetCell(column.Ordinal).CellStyle = headStyle;
+
+                    //设置列宽  
+                    sheet.SetColumnWidth(column.Ordinal, (arrColWidth[column.Ordinal] + 1) * 256);
+                }
+
+                //填充内容
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    dataRow = sheet.CreateRow(i + 1) as XSSFRow;
+                    for (int j = 0; j < dt.Columns.Count; j++)
+                    {
+                        dataRow.CreateCell(j).SetCellValue(dt.Rows[i][j].ToString());
+                    }
+                }
+            }
+            //保存
+
+            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                workbook.Write(fs);
+            }
+
+
+        }
+
+
         /// <summary>  
         /// DataTable导出到Excel文件  
         /// </summary>  
@@ -818,7 +885,7 @@ namespace StatsisLib
                             }
                             catch (Exception exception)
                             {
-                               // wl.WriteLogs(exception.ToString());
+                                // wl.WriteLogs(exception.ToString());
                             }
                         }
                         table.Rows.Add(dataRow);
@@ -911,7 +978,7 @@ namespace StatsisLib
             }
             catch (Exception ex)
             {
-               // wl.WriteLogs(ex.ToString());
+                // wl.WriteLogs(ex.ToString());
             }
         }
 

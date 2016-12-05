@@ -57,10 +57,7 @@ namespace StatsicForXX
             }
         }
 
-        private string GetMapPath()
-        {
-            return Path.Combine(Environment.CurrentDirectory, "mapper.xml");
-        }
+
         public static List<T> Clone<T>(object List)
         {
             using (Stream objectStream = new MemoryStream())
@@ -71,68 +68,109 @@ namespace StatsicForXX
                 return formatter.Deserialize(objectStream) as List<T>;
             }
         }
+
         private void tbPath_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             OpenFileDialog dig = new OpenFileDialog();
             if (dig.ShowDialog() == DialogResult.OK)
             {
                 tbPath.Text = dig.SafeFileName;
-                string path = "C:\\2.xls";
-                LoadSrcInfo(path);
+            }
+
+            if (LoadSrcInfo(tbPath.Text))
+            {
+                btn_Go.Enabled = btn_setting.Enabled = true;
             }
         }
 
-        private void LoadSrcInfo(string path)
+        private bool LoadSrcInfo(string path)
         {
-            var dt = NPOIHelper.ImportExceltoDt(path, 0, 0);
-            SrcInfos = Common.DTToList<BaseDataInfo>(dt);
-            SrcInfos = SrcInfos.Where(x => !string.IsNullOrEmpty(x.姓名)).ToList();
-        }
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            {
+                return false;
+            }
+            try
+            {
+                var dt = NPOIHelper.ImportExceltoDt(path, 0, 0);
+                SrcInfos = Common.DTToList<BaseDataInfo>(dt);
+                SrcInfos = SrcInfos.Where(x => !string.IsNullOrEmpty(x.姓名)).ToList();
+                return true;
+            }
+            catch
+            {
 
-        private void btnLoad_Click(object sender, EventArgs e)
-        {
-            UpdateDest();
-            int index = 1;
-            OpenSettingDig();
-        }
-
-        private void OpenSettingDig()
-        {
-            var list = SrcInfos.GroupBy(x => x.技能组).ToDictionary(x => x.Key, x => x.ToList());
-            new SettingGroups(list.Select(x => x.Key).ToList()).ShowDialog();
+            }
+            return false;
         }
 
         private void btn_Go_Click(object sender, EventArgs e)
         {
-            string path = "C:\\2.xls";
-            LoadSrcInfo(path);
-            UpdateDest();
-            DataProcess.T4(DestInfos);
-
-           // string path = GetXmlPath();
-            if (File.Exists(path))
+            if (!IsFinishConfig)
             {
-
-                //var list =DestInfos.GroupBy(x => x.技能组).ToDictionary(x => x.Key, x => x.ToList());
-
-                //NestDirectory nsDir = StatsisLib.NestDirectory.Deserialize(path);
-                //foreach (var item in nsDir.Children)
-                //{
-                //    string groups = item.GetChildrenNames();
-                   
-                //}
+                OpenSettingDig();
             }
-            else
+            if (!IsFinishConfig)
             {
                 MessageBox.Show("未设置组");
+                return;
             }
+
+            UpdateDest();
+            List<DataTable> ds = new List<DataTable>()
+            {
+                DataProcess.T1(DestInfos),
+                DataProcess.T2(DestInfos),
+                DataProcess.T3(DestInfos),
+                DataProcess.T4(DestInfos)
+            };
+            int index = 1;
+            ds.ForEach(x => x.TableName = (index++).ToString());
+            NPOIHelper.ExportSimple(ds, "C:\\1q.xlsx");
 
 
         }
 
+        private string GetMapPath()
+        {
+            return Path.Combine(Environment.CurrentDirectory, "mapper.xml");
+        }
         private string GetXmlPath()
         {
             return Path.Combine(Environment.CurrentDirectory, "group.xml");
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            btn_Go.Enabled = btn_setting.Enabled = false;
+            tbPath.Text = "C:\\2.xls";
+            SettingConfigFlag();
+        }
+
+        private void SettingConfigFlag()
+        {
+            IsFinishConfig = File.Exists(GetXmlPath()) && File.Exists(GetMapPath());
+        }
+
+        public bool IsFinishConfig { get; set; }
+
+        private void btn_setting_Click(object sender, EventArgs e)
+        {
+            OpenSetting();
+        }
+
+        private void OpenSetting()
+        {
+            string path = tbPath.Text;
+            if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
+            {
+                OpenSettingDig();
+                SettingConfigFlag();
+            }
+        }
+        private void OpenSettingDig()
+        {
+            var list = SrcInfos.GroupBy(x => x.技能组).ToDictionary(x => x.Key, x => x.ToList());
+            new SettingGroups(list.Select(x => x.Key).ToList()).ShowDialog();
         }
     }
 }

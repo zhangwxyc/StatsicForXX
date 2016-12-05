@@ -28,20 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnLoad = new System.Windows.Forms.Button();
             this.tbPath = new System.Windows.Forms.TextBox();
             this.btn_Go = new System.Windows.Forms.Button();
+            this.btn_setting = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // btnLoad
-            // 
-            this.btnLoad.Location = new System.Drawing.Point(187, 123);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(62, 23);
-            this.btnLoad.TabIndex = 0;
-            this.btnLoad.Text = "OK";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
             // tbPath
             // 
@@ -61,26 +51,36 @@
             this.btn_Go.UseVisualStyleBackColor = true;
             this.btn_Go.Click += new System.EventHandler(this.btn_Go_Click);
             // 
+            // btn_setting
+            // 
+            this.btn_setting.Location = new System.Drawing.Point(187, 212);
+            this.btn_setting.Name = "btn_setting";
+            this.btn_setting.Size = new System.Drawing.Size(75, 23);
+            this.btn_setting.TabIndex = 3;
+            this.btn_setting.Text = "设置";
+            this.btn_setting.UseVisualStyleBackColor = true;
+            this.btn_setting.Click += new System.EventHandler(this.btn_setting_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.btn_setting);
             this.Controls.Add(this.btn_Go);
             this.Controls.Add(this.tbPath);
-            this.Controls.Add(this.btnLoad);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.TextBox tbPath;
         private System.Windows.Forms.Button btn_Go;
+        private System.Windows.Forms.Button btn_setting;
     }
 }
 
