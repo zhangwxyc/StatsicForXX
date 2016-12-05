@@ -5,7 +5,7 @@ namespace StatsisLib
     [Serializable]
     public partial class BaseDataInfo
     {
-        internal object 通过率系数;
+
 
         #region base
         public string 技能组 { get; set; }
@@ -41,6 +41,9 @@ namespace StatsisLib
 
         #endregion
 
+        #region compute
+        public double 通过率系数{ get; set; }
+
         public string 通过率 { get; set; }
 
         public string 客户满意度 { get; set; }
@@ -52,6 +55,26 @@ namespace StatsisLib
         public string 净满意度 { get; set; }
 
         public string 满意度系数 { get; set; }
+        #endregion
+
+
+        public bool IsNew
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(新人上岗时间))
+                {
+                    return false;
+                }
+                DateTime dt = DateTime.Now;
+                if(!DateTime.TryParse(新人上岗时间, out dt))
+                {
+                    return false;
+                }
+
+                return dt.AddMonths(6) > DateTime.Now;
+            }
+        }
 
 
     }

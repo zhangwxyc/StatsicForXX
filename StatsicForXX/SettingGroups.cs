@@ -462,5 +462,16 @@ namespace StatsicForXX
             var dir = lv_groups.SelectedItems[0].Tag as MappInfo;
             lv_groups.SelectedItems[0].Text = dir.Value = dir.Key;
         }
+
+        private void tv_m_Copy_Click(object sender, EventArgs e)
+        {
+            var node = tv_nds.SelectedNode;
+            StringBuilder str = new StringBuilder();
+            foreach (TreeNode item in node.Nodes)
+            {
+                str.AppendFormat("{0},", item.Text);
+            }
+            Clipboard.SetText(str.ToString().TrimEnd(','));
+        }
     }
 }

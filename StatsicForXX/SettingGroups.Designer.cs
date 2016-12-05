@@ -30,18 +30,20 @@
         {
             this.components = new System.ComponentModel.Container();
             this.tv_nds = new System.Windows.Forms.TreeView();
-            this.lv_groups = new System.Windows.Forms.ListView();
-            this.btn_Save = new System.Windows.Forms.Button();
             this.tv_m = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tv_m_Add = new System.Windows.Forms.ToolStripMenuItem();
             this.tv_m_Alter = new System.Windows.Forms.ToolStripMenuItem();
+            this.tv_m_Del = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tv_m_Up = new System.Windows.Forms.ToolStripMenuItem();
             this.tv_m_Down = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tv_m_Del = new System.Windows.Forms.ToolStripMenuItem();
+            this.lv_groups = new System.Windows.Forms.ListView();
             this.lv_m = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.lv_m_map = new System.Windows.Forms.ToolStripMenuItem();
             this.lv_m_unmap = new System.Windows.Forms.ToolStripMenuItem();
+            this.btn_Save = new System.Windows.Forms.Button();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tv_m_Copy = new System.Windows.Forms.ToolStripMenuItem();
             this.tv_m.SuspendLayout();
             this.lv_m.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +62,60 @@
             this.tv_nds.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_nds_DragDrop);
             this.tv_nds.DragEnter += new System.Windows.Forms.DragEventHandler(this.tv_nds_DragEnter);
             // 
+            // tv_m
+            // 
+            this.tv_m.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tv_m_Add,
+            this.tv_m_Alter,
+            this.tv_m_Del,
+            this.toolStripSeparator1,
+            this.tv_m_Up,
+            this.tv_m_Down,
+            this.toolStripSeparator2,
+            this.tv_m_Copy});
+            this.tv_m.Name = "tv_m";
+            this.tv_m.Size = new System.Drawing.Size(153, 170);
+            // 
+            // tv_m_Add
+            // 
+            this.tv_m_Add.Name = "tv_m_Add";
+            this.tv_m_Add.Size = new System.Drawing.Size(152, 22);
+            this.tv_m_Add.Text = "添加";
+            this.tv_m_Add.Click += new System.EventHandler(this.tv_m_Add_Click);
+            // 
+            // tv_m_Alter
+            // 
+            this.tv_m_Alter.Name = "tv_m_Alter";
+            this.tv_m_Alter.Size = new System.Drawing.Size(152, 22);
+            this.tv_m_Alter.Text = "编辑";
+            this.tv_m_Alter.Click += new System.EventHandler(this.tv_m_Alter_Click);
+            // 
+            // tv_m_Del
+            // 
+            this.tv_m_Del.Name = "tv_m_Del";
+            this.tv_m_Del.Size = new System.Drawing.Size(152, 22);
+            this.tv_m_Del.Text = "删除";
+            this.tv_m_Del.Click += new System.EventHandler(this.tv_m_Del_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // tv_m_Up
+            // 
+            this.tv_m_Up.Name = "tv_m_Up";
+            this.tv_m_Up.Size = new System.Drawing.Size(152, 22);
+            this.tv_m_Up.Text = "向上";
+            this.tv_m_Up.Click += new System.EventHandler(this.tv_m_Up_Click);
+            // 
+            // tv_m_Down
+            // 
+            this.tv_m_Down.Name = "tv_m_Down";
+            this.tv_m_Down.Size = new System.Drawing.Size(152, 22);
+            this.tv_m_Down.Text = "向下";
+            this.tv_m_Down.Click += new System.EventHandler(this.tv_m_Down_Click);
+            // 
             // lv_groups
             // 
             this.lv_groups.AllowDrop = true;
@@ -74,6 +130,28 @@
             this.lv_groups.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.lv_groups_AfterLabelEdit);
             this.lv_groups.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.lv_groups_ItemDrag);
             // 
+            // lv_m
+            // 
+            this.lv_m.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lv_m_map,
+            this.lv_m_unmap});
+            this.lv_m.Name = "lv_m";
+            this.lv_m.Size = new System.Drawing.Size(125, 48);
+            // 
+            // lv_m_map
+            // 
+            this.lv_m_map.Name = "lv_m_map";
+            this.lv_m_map.Size = new System.Drawing.Size(124, 22);
+            this.lv_m_map.Text = "映射";
+            this.lv_m_map.Click += new System.EventHandler(this.lv_m_map_Click);
+            // 
+            // lv_m_unmap
+            // 
+            this.lv_m_unmap.Name = "lv_m_unmap";
+            this.lv_m_unmap.Size = new System.Drawing.Size(124, 22);
+            this.lv_m_unmap.Text = "取消映射";
+            this.lv_m_unmap.Click += new System.EventHandler(this.lv_m_unmap_Click);
+            // 
             // btn_Save
             // 
             this.btn_Save.Location = new System.Drawing.Point(338, 311);
@@ -84,79 +162,17 @@
             this.btn_Save.UseVisualStyleBackColor = true;
             this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
             // 
-            // tv_m
+            // toolStripSeparator2
             // 
-            this.tv_m.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tv_m_Add,
-            this.tv_m_Alter,
-            this.tv_m_Del,
-            this.toolStripSeparator1,
-            this.tv_m_Up,
-            this.tv_m_Down});
-            this.tv_m.Name = "tv_m";
-            this.tv_m.Size = new System.Drawing.Size(101, 120);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
-            // tv_m_Add
+            // tv_m_Copy
             // 
-            this.tv_m_Add.Name = "tv_m_Add";
-            this.tv_m_Add.Size = new System.Drawing.Size(100, 22);
-            this.tv_m_Add.Text = "添加";
-            this.tv_m_Add.Click += new System.EventHandler(this.tv_m_Add_Click);
-            // 
-            // tv_m_Alter
-            // 
-            this.tv_m_Alter.Name = "tv_m_Alter";
-            this.tv_m_Alter.Size = new System.Drawing.Size(100, 22);
-            this.tv_m_Alter.Text = "编辑";
-            this.tv_m_Alter.Click += new System.EventHandler(this.tv_m_Alter_Click);
-            // 
-            // tv_m_Up
-            // 
-            this.tv_m_Up.Name = "tv_m_Up";
-            this.tv_m_Up.Size = new System.Drawing.Size(100, 22);
-            this.tv_m_Up.Text = "向上";
-            this.tv_m_Up.Click += new System.EventHandler(this.tv_m_Up_Click);
-            // 
-            // tv_m_Down
-            // 
-            this.tv_m_Down.Name = "tv_m_Down";
-            this.tv_m_Down.Size = new System.Drawing.Size(100, 22);
-            this.tv_m_Down.Text = "向下";
-            this.tv_m_Down.Click += new System.EventHandler(this.tv_m_Down_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(97, 6);
-            // 
-            // tv_m_Del
-            // 
-            this.tv_m_Del.Name = "tv_m_Del";
-            this.tv_m_Del.Size = new System.Drawing.Size(100, 22);
-            this.tv_m_Del.Text = "删除";
-            this.tv_m_Del.Click += new System.EventHandler(this.tv_m_Del_Click);
-            // 
-            // lv_m
-            // 
-            this.lv_m.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lv_m_map,
-            this.lv_m_unmap});
-            this.lv_m.Name = "lv_m";
-            this.lv_m.Size = new System.Drawing.Size(153, 70);
-            // 
-            // lv_m_map
-            // 
-            this.lv_m_map.Name = "lv_m_map";
-            this.lv_m_map.Size = new System.Drawing.Size(152, 22);
-            this.lv_m_map.Text = "映射";
-            this.lv_m_map.Click += new System.EventHandler(this.lv_m_map_Click);
-            // 
-            // lv_m_unmap
-            // 
-            this.lv_m_unmap.Name = "lv_m_unmap";
-            this.lv_m_unmap.Size = new System.Drawing.Size(152, 22);
-            this.lv_m_unmap.Text = "取消映射";
-            this.lv_m_unmap.Click += new System.EventHandler(this.lv_m_unmap_Click);
+            this.tv_m_Copy.Name = "tv_m_Copy";
+            this.tv_m_Copy.Size = new System.Drawing.Size(152, 22);
+            this.tv_m_Copy.Text = "拷贝串";
+            this.tv_m_Copy.Click += new System.EventHandler(this.tv_m_Copy_Click);
             // 
             // SettingGroups
             // 
@@ -190,5 +206,7 @@
         private System.Windows.Forms.ContextMenuStrip lv_m;
         private System.Windows.Forms.ToolStripMenuItem lv_m_map;
         private System.Windows.Forms.ToolStripMenuItem lv_m_unmap;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem tv_m_Copy;
     }
 }

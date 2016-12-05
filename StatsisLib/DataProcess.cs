@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -131,6 +132,43 @@ namespace StatsisLib
             var dt = Common.ListToDataTable<BaseDataInfo>(resultData, Common.GetConfig("T1").Split(',').ToList(), false);
         }
 
+        public static void T2(List<BaseDataInfo> list)
+        {
+            string groups = Common.GetConfig("VIP");
+            var subList = list.Where(x => FilterGroup(x, groups)).ToList();
+            Compute(subList);
+            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), false);
+        }
+
+        public static void T3(List<BaseDataInfo> list)
+        {
+            var subList = list.Where(x => x.IsNew).ToList();
+            Compute(subList);
+            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T3").Split(',').ToList(), false);
+        }
+        public static void T4(List<BaseDataInfo> list)
+        {
+            string tableHeader = "T2";
+
+            var subList = list.Where(x => !x.IsNew).ToList();
+            var dt = T0(subList, tableHeader);
+        }
+
+        private static DataTable T0(List<BaseDataInfo> subList, string tableHeader)
+        {
+            Compute(subList);
+            subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
+            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig(tableHeader).Split(',').ToList(), true);
+            return dt;
+        }
+
+        public static void T5(List<BaseDataInfo> list)
+        {
+            string groups = Common.GetConfig("All");
+            var sList = list.Where(x => FilterGroup(x,groups)).ToList();
+            var dt = T0(sList,"T5");
+        }
+
 
         public static List<BaseDataInfo> SumLine(List<BaseDataInfo> list)
         {
@@ -199,11 +237,22 @@ namespace StatsisLib
                 item.客户评价率 = GetEvalRate(item);
                 item.客户满意度 = GetSI(item);
                 item.净满意度 = GetJSI(item);
-                item.通过率系数=GetPII(item);
+                item.通过率系数 = GetPII(item);
             }
         }
 
+        public static double RateToDouble(string rate)
+        {
+            if (string.IsNullOrWhiteSpace(rate))
+            {
+                return 0;
+            }
 
+            rate = rate.Replace("%", "");
+            double r = 0;
+            double.TryParse(rate, out r);
+            return r;
+        }
 
         private static string GetPassRate(BaseDataInfo x)
         {
@@ -221,15 +270,15 @@ namespace StatsisLib
 
         private static string GetJSI(BaseDataInfo x)
         {
-            return x.净满意度;
+            return GetRate((x.满意 - x.不满意), x.总量);
         }
-        private static string GetPII(BaseDataInfo item)
+        private static double GetPII(BaseDataInfo x)
         {
-            throw new NotImplementedException();
+            return GetFactorPass(x.通过量, x.录音抽检数);
         }
         private static string GetSII(BaseDataInfo x)
         {
-            return GetFactor(x.满意, x.总量).ToString();
+            return GetFactor((x.满意 - x.不满意), x.总量).ToString();
         }
         private static string GetYu(BaseDataInfo x)
         {

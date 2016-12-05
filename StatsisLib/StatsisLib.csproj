@@ -65,10 +65,12 @@
     <Compile Include="BaseDataInfo.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="DataProcess.cs" />
+    <Compile Include="DeepCopy.cs" />
     <Compile Include="MappInfo.cs" />
     <Compile Include="NestDirectory.cs" />
     <Compile Include="NPOIHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializeHelper.cs" />
     <Compile Include="StatsicDataInfo.cs" />
     <Compile Include="TM\IMaker.cs" />
     <Compile Include="TM\LeaderMaker.cs" />

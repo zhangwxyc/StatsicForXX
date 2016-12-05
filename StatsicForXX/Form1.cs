@@ -33,7 +33,8 @@ namespace StatsicForXX
 
         public void UpdateDest()
         {
-            DestInfos = Clone<BaseDataInfo>(SrcInfos);
+            // DestInfos = Clone<BaseDataInfo>(SrcInfos);
+            DestInfos = SrcInfos.DeepClone();
             string path = GetMapPath();
             if (File.Exists(path))
             {
@@ -106,7 +107,7 @@ namespace StatsicForXX
             string path = "C:\\2.xls";
             LoadSrcInfo(path);
             UpdateDest();
-            DataProcess.T1(DestInfos);
+            DataProcess.T4(DestInfos);
 
            // string path = GetXmlPath();
             if (File.Exists(path))
