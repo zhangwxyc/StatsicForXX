@@ -35,25 +35,25 @@
             // 
             // tbPath
             // 
-            this.tbPath.Location = new System.Drawing.Point(22, 36);
+            this.tbPath.Location = new System.Drawing.Point(12, 32);
             this.tbPath.Name = "tbPath";
-            this.tbPath.Size = new System.Drawing.Size(191, 21);
+            this.tbPath.Size = new System.Drawing.Size(263, 21);
             this.tbPath.TabIndex = 1;
             this.tbPath.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tbPath_MouseDoubleClick);
             // 
             // btn_Go
             // 
-            this.btn_Go.Location = new System.Drawing.Point(85, 154);
+            this.btn_Go.Location = new System.Drawing.Point(12, 74);
             this.btn_Go.Name = "btn_Go";
             this.btn_Go.Size = new System.Drawing.Size(75, 23);
             this.btn_Go.TabIndex = 2;
-            this.btn_Go.Text = "button1";
+            this.btn_Go.Text = "导出";
             this.btn_Go.UseVisualStyleBackColor = true;
             this.btn_Go.Click += new System.EventHandler(this.btn_Go_Click);
             // 
             // btn_setting
             // 
-            this.btn_setting.Location = new System.Drawing.Point(187, 212);
+            this.btn_setting.Location = new System.Drawing.Point(200, 74);
             this.btn_setting.Name = "btn_setting";
             this.btn_setting.Size = new System.Drawing.Size(75, 23);
             this.btn_setting.TabIndex = 3;
@@ -65,12 +65,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(301, 121);
             this.Controls.Add(this.btn_setting);
             this.Controls.Add(this.btn_Go);
             this.Controls.Add(this.tbPath);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Tool";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
