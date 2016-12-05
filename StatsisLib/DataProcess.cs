@@ -141,7 +141,14 @@ namespace StatsisLib
             var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), false);
             return dt;
         }
-
+        public static DataTable T2_5(List<BaseDataInfo> list)
+        {
+            string groups = Common.GetConfig("NoVIP");
+            var subList = list.Where(x => FilterGroup(x, groups)).ToList();
+            Compute(subList);
+            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), false);
+            return dt;
+        }
         public static DataTable T3(List<BaseDataInfo> list)
         {
             var subList = list.Where(x => x.IsNew).ToList();

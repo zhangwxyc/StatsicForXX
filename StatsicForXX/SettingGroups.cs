@@ -84,12 +84,12 @@ namespace StatsicForXX
         {
             var node = new TreeNode() { Text = nDirectory.Name, Tag = nDirectory };
             tv_nds.Nodes.Add(node);
-
+            LoadTreeNode(nDirectory, node);
             //foreach (var item in nDirectory.Children)
             //{
-            //    var node = new TreeNode() { Text = item.Name, Tag = item };
-            //    tv_nds.Nodes.Add(node);
-            //    LoadTreeNode(item, node);
+            //    var snode = new TreeNode() { Text = item.Name, Tag = item };
+            //    tv_nds.Nodes.Add(snode);
+            //    LoadTreeNode(item, snode);
             //}
         }
 
@@ -101,12 +101,13 @@ namespace StatsicForXX
                 string name = item.Name;
                 if (string.IsNullOrWhiteSpace(item.NickName))
                 {
-                    name = string.Format("{0}{1}", item.Name, "--"+item.NickName);
+                    name = string.Format("{0}", item.Name);
                 }
                 var chiildNode = new TreeNode() { Text = name, Tag = item };
                 node.Nodes.Add(chiildNode);
                 LoadTreeNode(item, chiildNode);
             }
+            node.Expand();
         }
 
         private void btn_Add_Click(object sender, EventArgs e)
@@ -150,7 +151,7 @@ namespace StatsicForXX
             string path = GetXmlPath();
             if (File.Exists(path))
             {
-                File.Move(path, string.Format("{0}_{1}.bak", path, DateTime.Now.ToString().Replace(":", "_").Replace("-", "_")));
+                File.Move(path, string.Format("{0}_{1}.bak", path, DateTime.Now.ToString().Replace(":", "_").Replace("-", "_").Replace("/", "_")));
             }
             NDirectory.Serialize(path);
 
@@ -159,7 +160,7 @@ namespace StatsicForXX
             string mapPath = GetMapPath();
             if (File.Exists(mapPath))
             {
-                File.Move(mapPath, string.Format("{0}_{1}.bak", mapPath, DateTime.Now.ToString().Replace(":", "_").Replace("-", "_")));
+                File.Move(mapPath, string.Format("{0}_{1}.bak", mapPath, DateTime.Now.ToString().Replace(":", "_").Replace("-", "_").Replace("/", "_")));
             }
             mapperInfos.Clear();
             foreach (ListViewItem item in lv_groups.Items)
