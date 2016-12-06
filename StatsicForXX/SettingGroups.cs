@@ -99,7 +99,7 @@ namespace StatsicForXX
             foreach (var item in nDirectory.Children.OrderBy(x => x.OrderIndex).ToList())
             {
                 string name = item.Name;
-                if (string.IsNullOrWhiteSpace(item.NickName))
+                if (string.IsNullOrEmpty(item.NickName))
                 {
                     name = string.Format("{0}", item.Name);
                 }

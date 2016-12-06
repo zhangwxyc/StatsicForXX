@@ -62,7 +62,7 @@ namespace StatsisLib
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(新人上岗时间))
+                if (string.IsNullOrEmpty(新人上岗时间))
                 {
                     return false;
                 }

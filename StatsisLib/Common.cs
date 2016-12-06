@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace StatsisLib
 {
@@ -23,7 +22,7 @@ namespace StatsisLib
                 DataRow dr = dt.NewRow();
                 foreach (var propItem in propArray)
                 {
-                    dr[propItem.Name] = propItem.GetValue(info);
+                    dr[propItem.Name] = propItem.GetValue(info,null);
                 }
                 dt.Rows.Add(dr);
             }
@@ -58,7 +57,7 @@ namespace StatsisLib
                 }
                 foreach (var propItem in pInfos)
                 {
-                    object o = propItem.GetValue(info);
+                    object o = propItem.GetValue(info,null);
                     if (propItem.PropertyType.Name == "Decimal")
                     {
                         o = Decimal.Parse(o.ToString()).ToString("f2");

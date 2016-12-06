@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace StatsisLib
 {
@@ -37,7 +36,7 @@ namespace StatsisLib
 
         private static bool FilterGroup(BaseDataInfo x, string groups)
         {
-            if (x == null || string.IsNullOrWhiteSpace(groups) || string.IsNullOrEmpty(x.工号))
+            if (x == null || string.IsNullOrEmpty(groups) || string.IsNullOrEmpty(x.工号))
             {
                 return false;
             }
@@ -138,22 +137,22 @@ namespace StatsisLib
             string groups = Common.GetConfig("VIP");
             var subList = list.Where(x => FilterGroup(x, groups)).ToList();
             Compute(subList);
-            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), false);
+            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), true);
             return dt;
         }
         public static DataTable T2_5(List<BaseDataInfo> list)
         {
-            string groups = Common.GetConfig("NoVIP");
+            string groups = Common.GetConfig("Media");
             var subList = list.Where(x => FilterGroup(x, groups)).ToList();
             Compute(subList);
-            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), false);
+            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), true);
             return dt;
         }
         public static DataTable T3(List<BaseDataInfo> list)
         {
             var subList = list.Where(x => x.IsNew).ToList();
             Compute(subList);
-            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T3").Split(',').ToList(), false);
+            var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T3").Split(',').ToList(), true);
             return dt;
         }
         public static DataTable T4(List<BaseDataInfo> list)
@@ -176,7 +175,8 @@ namespace StatsisLib
         public static DataTable T5(List<BaseDataInfo> list)
         {
             string groups = Common.GetConfig("All");
-            var sList = list.Where(x => FilterGroup(x,groups)).ToList();
+            //var sList = list.Where(x => FilterGroup(x,groups)).ToList();
+            var sList = list;
             var dt = T0(sList,"T4");
             return dt;
         }
@@ -255,7 +255,7 @@ namespace StatsisLib
 
         public static double RateToDouble(string rate)
         {
-            if (string.IsNullOrWhiteSpace(rate))
+            if (string.IsNullOrEmpty(rate))
             {
                 return 0;
             }
@@ -318,16 +318,16 @@ namespace StatsisLib
         /// <param name="v1"></param>
         /// <param name="v2"></param>
         /// <returns></returns>
-        private static double GetFactor(int v1, int v2)
+        private static double GetFactorPass(int v1, int v2)
         {
             if (v2 == 0 || v1 == 0)
             {
                 return 0;
             }
-            return GetFactor((double)v1 / v2);
+            return GetFactorPass((double)v1 / v2);
         }
 
-        public static double GetFactor(double rate)
+        public static double GetFactorPass(double rate)
         {
             if (rate == 1)
             {
@@ -343,15 +343,15 @@ namespace StatsisLib
             }
             return 0.5;
         }
-        private static double GetFactorPass(int v1, int v2)
+        private static double GetFactor(int v1, int v2)
         {
             if (v2 == 0 || v1 == 0)
             {
                 return 0;
             }
-            return GetFactorPass((double)v1 / v2);
+            return GetFactor((double)v1 / v2);
         }
-        public static double GetFactorPass(double rate)
+        public static double GetFactor(double rate)
         {
             if (rate >= 0.97)
             {
