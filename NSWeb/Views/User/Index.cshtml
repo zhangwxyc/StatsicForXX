@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-3 maintable">
+        <div class="panel panel-default">
+            <div class="panel-heading">Groups</div>
+            <div class="panel-body">
+                <ul class="list-group" id="list_group">
+                    @{
+                        var infos = ViewData["gInfo"] as List<DataService.GroupInfo>;
+                        foreach (var item in infos)
+                        {
+                            @:
+                            <a onclick="GetDataShowTable('@(HttpUtility.UrlEncode(item.Name,System.Text.Encoding.UTF8))')" href="#" class="list-group-item">@item.Name</a>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <h2 id=""></h2>
+        <input type="hidden" id="h_curentGroup" />
+        <button type="button" class="btn btn-default btn-lg" onclick="UserDig('0')">
+            <span class='glyphicon glyphicon-plus'></span>
+        </button>
+
+        <div id="tb_Users">
+
+        </div>
+        <table class="table table-bordered" id="UserList"></table>
+    </div>
+</div>
+
+<div class="modal fade" id="div_OpUser">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">xxcz</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <input id="h_curop" type="hidden" />
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    Num:
+                                </span>
+                                <input type="text" class="form-control" id="tb_Num">
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    姓名：
+                                </span>
+                                <input type="text" class="form-control" id="tb_Name">
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    InTime:
+                                </span>
+                                <input type="text" class="form-control" id="tb_Time">
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    group：
+                                </span>
+                                <select id="s_groupList">
+                                    @{
+                                        foreach (var item in infos)
+                                        {
+                                            @:
+                                            <option value="@item.Name">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div><!-- /.row -->
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btn_opUser" onclick="SaveUser()">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
