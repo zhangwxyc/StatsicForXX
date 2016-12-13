@@ -12,17 +12,23 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
+           // NewMethod();
+            //T1(list);
+            
+        }
+
+        private static void NewMethod()
+        {
             string path = "C:\\2.xls";
             var dt = NPOIHelper.ImportExceltoDt(path, 0, 0);
             var infos = Common.DTToList<BaseDataInfo>(dt);
             int index = 1;
             //index = Total(infos, index);
 
-           var t3= GetT3(infos, "北京1组");
+            var t3 = GetT3(infos, "北京1组");
 
             var list = infos.GroupBy(x => x.技能组).ToDictionary(x => x.Key, x => x.ToList());
             list.Select(x => x.Key);
-            //T1(list);
         }
 
         private static object GetT3(List<BaseDataInfo> infos, string groups)

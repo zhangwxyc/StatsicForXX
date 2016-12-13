@@ -29,5 +29,6 @@ namespace DataService
         public virtual DbSet<Mapper> Mapper { get; set; }
         public virtual DbSet<StatsicRelation> StatsicRelation { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
+        public virtual DbSet<StatsicInfo> StatsicInfo { get; set; }
     }
 }

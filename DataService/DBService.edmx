@@ -12,6 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="ParentName" Type="nvarchar" MaxLength="500" />
+          <Property Name="MapperName" Type="nvarchar" MaxLength="500" />
           <Property Name="IsLeaf" Type="int" />
           <Property Name="OrderIndex" Type="int" />
           <Property Name="IsDel" Type="int" />
@@ -22,6 +23,14 @@
           </Key>
           <Property Name="SName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="StatsicInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatsicName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="IsDel" Type="int" />
         </EntityType>
         <EntityType Name="StatsicLineInfo">
           <Key>
@@ -35,7 +44,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StatsicName" Type="nvarchar" MaxLength="500" />
           <Property Name="GroupName" Type="nvarchar" MaxLength="500" />
         </EntityType>
@@ -52,6 +61,7 @@
         <EntityContainer Name="DBServicesStoreContainer">
           <EntitySet Name="GroupInfo" EntityType="Self.GroupInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Mapper" EntityType="Self.Mapper" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatsicInfo" EntityType="Self.StatsicInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatsicLineInfo" EntityType="Self.StatsicLineInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatsicRelation" EntityType="Self.StatsicRelation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
@@ -65,6 +75,7 @@
           <EntitySet Name="Mapper" EntityType="DBServices.Mapper" />
           <EntitySet Name="StatsicRelation" EntityType="DBServices.StatsicRelation" />
           <EntitySet Name="UserInfo" EntityType="DBServices.UserInfo" />
+          <EntitySet Name="StatsicInfo" EntityType="DBServices.StatsicInfo" />
         </EntityContainer>
         <EntityType Name="GroupInfo">
           <Key>
@@ -76,6 +87,7 @@
           <Property Name="IsLeaf" Type="Int32" />
           <Property Name="OrderIndex" Type="Int32" />
           <Property Name="IsDel" Type="Int32" />
+          <Property Name="MapperName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Mapper">
           <Key>
@@ -102,6 +114,14 @@
           <Property Name="GroupName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IsDel" Type="Int32" />
         </EntityType>
+        <EntityType Name="StatsicInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatsicName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsDel" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -111,6 +131,7 @@
           <EntitySetMapping Name="GroupInfo">
             <EntityTypeMapping TypeName="DBServices.GroupInfo">
               <MappingFragment StoreEntitySet="GroupInfo">
+                <ScalarProperty Name="MapperName" ColumnName="MapperName" />
                 <ScalarProperty Name="IsDel" ColumnName="IsDel" />
                 <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
                 <ScalarProperty Name="IsLeaf" ColumnName="IsLeaf" />
@@ -144,6 +165,15 @@
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
                 <ScalarProperty Name="InTime" ColumnName="InTime" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatsicInfo">
+            <EntityTypeMapping TypeName="DBServices.StatsicInfo">
+              <MappingFragment StoreEntitySet="StatsicInfo">
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="StatsicName" ColumnName="StatsicName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

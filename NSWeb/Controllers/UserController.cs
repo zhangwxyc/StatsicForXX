@@ -13,15 +13,23 @@ namespace NSWeb.Controllers
 
         public ActionResult Index()
         {
-            ViewData["gInfo"] = DBContext.GroupInfo.ToList();
+            var infos = DBContext.GroupInfo.Where(x => x.IsDel != 1).ToList();
+            infos.ForEach(x => x.ParentName = GetGoodName(x.Name));
+            ViewData["gInfo"] = infos;
             return View();
+        }
+
+        private string GetGoodName(string name)
+        {
+            string firstL = StatsisLib.PinYinHelper.GetChineseSpell(name);
+            return string.Format("{0} {1}", firstL.Substring(0, 1), name);
         }
 
         [ActionName("s")]
         //[HttpGet]
         public JsonResult GetUserByGroup(string groupName)
         {
-            var uInfos = DBContext.UserInfo.Where(x => x.GroupName == groupName);
+            var uInfos = DBContext.UserInfo.Where(x => x.IsDel != 1 && x.GroupName == groupName);
             uInfos.ToList().ForEach(x =>
                 {
                     if (string.IsNullOrWhiteSpace(x.InTime))
@@ -37,12 +45,32 @@ namespace NSWeb.Controllers
             var uInfo = DBContext.UserInfo.FirstOrDefault(x => x.Id == uid);
             return Json(uInfo, JsonRequestBehavior.AllowGet);
         }
+        [ActionName("del")]
+        public JsonResult DelUserById(long uid)
+        {
+            Common.ResultInfo rInfo = new Common.ResultInfo();
+            try
+            {
+                var uInfo = DBContext.UserInfo.FirstOrDefault(x => x.Id == uid);
+                if (uInfo != null)
+                {
+                    uInfo.IsDel = 1;
+                    DBContext.SaveChanges();
+                    rInfo.IsSuccess = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                rInfo.Message = ex.Message;
+            }
 
+            return Json(rInfo);
+        }
         [ActionName("save")]
         public JsonResult OpUser(UserInfo userInfo)
         {
             Common.ResultInfo rInfo = new Common.ResultInfo();
-            if (userInfo==null||userInfo.Id==0)
+            if (userInfo == null || userInfo.Id == 0)
             {
                 rInfo.Message = "参数不正确";
                 return Json(rInfo);

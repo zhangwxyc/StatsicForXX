@@ -14,7 +14,7 @@
                         foreach (var item in infos)
                         {
                             @:
-                            <a onclick="GetDataShowTable('@(HttpUtility.UrlEncode(item.Name,System.Text.Encoding.UTF8))')" href="#" class="list-group-item">@item.Name</a>
+                            <a onclick="GetDataShowTable('@(HttpUtility.UrlEncode(item.Name,System.Text.Encoding.UTF8))')" href="#" class="list-group-item">@item.ParentName</a>
                         }
                     }
                 </ul>
@@ -40,16 +40,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">xxcz</h4>
+                <h4 class="modal-title" id="div_opTitle"></h4>
             </div>
             <div class="modal-body">
-                <p>
+            
                     <input id="h_curop" type="hidden" />
 
-                    <div class="row">
+                    <div class="row tabRow">
                         <div class="col-lg-6">
                             <div class="input-group">
-                                <span class="input-group-addon">
+                                <span class="input-group-addon tabLab">
                                     Num:
                                 </span>
                                 <input type="text" class="form-control" id="tb_Num">
@@ -57,17 +57,17 @@
                         </div><!-- /.col-lg-6 -->
                         <div class="col-lg-6">
                             <div class="input-group">
-                                <span class="input-group-addon">
+                                <span class="input-group-addon tabLab">
                                     姓名：
                                 </span>
                                 <input type="text" class="form-control" id="tb_Name">
                             </div><!-- /input-group -->
                         </div><!-- /.col-lg-6 -->
                     </div><!-- /.row -->
-                    <div class="row">
+                    <div class="row tabRow">
                         <div class="col-lg-6">
                             <div class="input-group">
-                                <span class="input-group-addon">
+                                <span class="input-group-addon tabLab">
                                     InTime:
                                 </span>
                                 <input type="text" class="form-control" id="tb_Time">
@@ -75,7 +75,7 @@
                         </div><!-- /.col-lg-6 -->
                         <div class="col-lg-6">
                             <div class="input-group">
-                                <span class="input-group-addon">
+                                <span class="input-group-addon tabLab">
                                     group：
                                 </span>
                                 <select id="s_groupList">
@@ -83,7 +83,7 @@
                                         foreach (var item in infos)
                                         {
                                             @:
-                                            <option value="@item.Name">@item.Name</option>
+                                            <option value="@item.Name">@item.ParentName</option>
                                         }
                                     }
                                 </select>
@@ -91,7 +91,7 @@
                         </div><!-- /.col-lg-6 -->
                     </div><!-- /.row -->
 
-                </p>
+              
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -72,6 +72,9 @@
       <DependentUpon>DBService.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatsicInfo.cs">
+      <DependentUpon>DBService.tt</DependentUpon>
+    </Compile>
     <Compile Include="StatsicRelation.cs">
       <DependentUpon>DBService.tt</DependentUpon>
     </Compile>

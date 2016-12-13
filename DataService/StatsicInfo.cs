@@ -12,14 +12,10 @@ namespace DataService
     using System;
     using System.Collections.Generic;
     
-    public partial class GroupInfo
+    public partial class StatsicInfo
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string ParentName { get; set; }
-        public Nullable<int> IsLeaf { get; set; }
-        public Nullable<int> OrderIndex { get; set; }
+        public string StatsicName { get; set; }
         public Nullable<int> IsDel { get; set; }
-        public string MapperName { get; set; }
     }
 }
