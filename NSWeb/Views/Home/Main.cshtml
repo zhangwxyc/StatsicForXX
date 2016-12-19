@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <input id="file_up_1" type="file">
+    <table class='table table-bordered' id='f_list'>
+        <tr><th>Id</th><th>文件名</th><th>创建时间</th><th>...</th></tr>
+        @foreach (var item in ViewData["files"] as List<DataService.UploadInfo>)
+        {
+            @:
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.CreateTime</td>
+                <td>
+                    <a href="javascript:UserDig('')"><span class='glyphicon glyphicon-cloud'></span> </a>
+                    <a href="javascript:UserDig('')"><span class='glyphicon glyphicon-trash'></span> </a>
+                    <a href="javascript:UserDig('')"><span class='glyphicon glyphicon-cloud-download'></span> </a>
+                </td>
+            </tr>
+        }
+    </table>
+    @*<input id="input-7" name="input7[]" multiple type="file" class="file file-loading" data-allowed-file-extensions='["csv", "txt"]'>*@
+</div>

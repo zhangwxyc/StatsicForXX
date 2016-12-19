@@ -100,5 +100,62 @@ namespace NSWeb.Controllers
 
             return Json(rInfo);
         }
+
+        [ActionName("op")]
+        public JsonResult OpGroup(string name, int op)
+        {
+            Common.ResultInfo rInfo = new Common.ResultInfo();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                rInfo.Message = "参数不正确";
+                return Json(rInfo);
+            }
+
+            try
+            {
+
+                var currentInfo = DBContext.GroupInfo.FirstOrDefault(x => x.Name == name);
+                if (op == 1)
+                {
+                    if (currentInfo == null)
+                    {
+                        currentInfo = new GroupInfo() { Name = name, IsDel = 0 };
+                        DBContext.GroupInfo.Add(currentInfo);
+                        DBContext.SaveChanges();
+                        rInfo.IsSuccess = true;
+                    }
+                    else if (currentInfo.IsDel == 1)
+                    {
+                        currentInfo.IsDel = 0;
+                        DBContext.SaveChanges();
+                        rInfo.IsSuccess = true;
+                    }
+                    else
+                    {
+                        rInfo.Message = string.Format("{0} 已存在", name);
+                    }
+                }
+                else
+                {
+                    if (currentInfo != null)
+                    {
+                        currentInfo.IsDel = 1;
+                        DBContext.SaveChanges();
+                        rInfo.IsSuccess = true;
+                    }
+                    else
+                    {
+                        rInfo.Message = string.Format("没有 {0}", name);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                rInfo.Message = ex.Message;
+            }
+
+            return Json(rInfo);
+        }
+
     }
 }

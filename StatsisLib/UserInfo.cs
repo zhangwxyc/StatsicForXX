@@ -12,6 +12,6 @@ namespace StatsisLib
         public string Name { get; set; }
 
         public string InTime { get; set; }
-
+        public string GroupName { get; set; }
     }
 }

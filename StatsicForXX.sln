@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication2", "Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{BD04CAAF-F12E-4666-B641-B4932B07C302}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnionLib", "UnionLib\UnionLib.csproj", "{E1ED0046-6F38-43A1-9C53-23F587E1597A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{BD04CAAF-F12E-4666-B641-B4932B07C302}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD04CAAF-F12E-4666-B641-B4932B07C302}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD04CAAF-F12E-4666-B641-B4932B07C302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1ED0046-6F38-43A1-9C53-23F587E1597A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1ED0046-6F38-43A1-9C53-23F587E1597A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1ED0046-6F38-43A1-9C53-23F587E1597A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1ED0046-6F38-43A1-9C53-23F587E1597A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

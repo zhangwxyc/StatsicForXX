@@ -48,6 +48,18 @@
           <Property Name="StatsicName" Type="nvarchar" MaxLength="500" />
           <Property Name="GroupName" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="UploadInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="SaveName" Type="nvarchar" MaxLength="500" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="IsDel" Type="int" />
+          <Property Name="FromIP" Type="nchar" MaxLength="100" />
+          <Property Name="FromUser" Type="nchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="UserInfo">
           <Key>
             <PropertyRef Name="Id" />
@@ -64,6 +76,7 @@
           <EntitySet Name="StatsicInfo" EntityType="Self.StatsicInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatsicLineInfo" EntityType="Self.StatsicLineInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatsicRelation" EntityType="Self.StatsicRelation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UploadInfo" EntityType="Self.UploadInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -76,6 +89,7 @@
           <EntitySet Name="StatsicRelation" EntityType="DBServices.StatsicRelation" />
           <EntitySet Name="UserInfo" EntityType="DBServices.UserInfo" />
           <EntitySet Name="StatsicInfo" EntityType="DBServices.StatsicInfo" />
+          <EntitySet Name="UploadInfo" EntityType="DBServices.UploadInfo" />
         </EntityContainer>
         <EntityType Name="GroupInfo">
           <Key>
@@ -121,6 +135,18 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StatsicName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IsDel" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UploadInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Int32" />
+          <Property Name="FromIP" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="FromUser" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="SaveName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -174,6 +200,19 @@
               <MappingFragment StoreEntitySet="StatsicInfo">
                 <ScalarProperty Name="IsDel" ColumnName="IsDel" />
                 <ScalarProperty Name="StatsicName" ColumnName="StatsicName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UploadInfo">
+            <EntityTypeMapping TypeName="DBServices.UploadInfo">
+              <MappingFragment StoreEntitySet="UploadInfo">
+                <ScalarProperty Name="SaveName" ColumnName="SaveName" />
+                <ScalarProperty Name="FromUser" ColumnName="FromUser" />
+                <ScalarProperty Name="FromIP" ColumnName="FromIP" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

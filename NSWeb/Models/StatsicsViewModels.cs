@@ -8,7 +8,7 @@ namespace NSWeb.Models
 {
     public class StatsicsViewModels
     {
-        public string GroupName { get; set; }
+        public string StatsicLineName { get; set; }
         public List<GroupItemModel> Datas { get; set; }
 
         public List<string> GroupsData { get; set; }

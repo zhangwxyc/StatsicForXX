@@ -30,5 +30,6 @@ namespace DataService
         public virtual DbSet<StatsicRelation> StatsicRelation { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
         public virtual DbSet<StatsicInfo> StatsicInfo { get; set; }
+        public virtual DbSet<UploadInfo> UploadInfo { get; set; }
     }
 }

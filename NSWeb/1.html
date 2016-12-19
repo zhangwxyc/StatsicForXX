@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="/Scripts/jquery-1.10.2.js"></script>
+</head>
+<body>
+    <div id="d">
+        <input type="checkbox" value="33"  />
+        <input type="checkbox" value="22" />
+        <input type="button"  onclick="cc()"/>
+    </div>
+</body>
+
+</html>
+<script type="text/javascript">
+    function cc() {
+        var infos = $("#d").find("input[checked='checked']");
+        alert(infos.length);
+        var infos = $("#d").find("input[type='checkbox']");
+        alert(infos.length);
+        var infos = $("#d input:checked");
+        alert(infos.length);
+    }
+</script>

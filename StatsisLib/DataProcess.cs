@@ -177,10 +177,14 @@ namespace StatsisLib
             string groups = Common.GetConfig("All");
             //var sList = list.Where(x => FilterGroup(x,groups)).ToList();
             var sList = list;
-            var dt = T0(sList,"T4");
+            var dt = T0(sList, "T4");
             return dt;
         }
-
+        public static DataTable T6(List<BaseDataInfo> list)
+        {
+            var dt = Common.ListToDataTable<BaseDataInfo>(list, Common.GetConfig("MainT").Split(',').ToList(), false);
+            return dt;
+        }
 
         public static List<BaseDataInfo> SumLine(List<BaseDataInfo> list)
         {
@@ -237,7 +241,31 @@ namespace StatsisLib
 
             return linfo;
         }
-
+        public static BaseDataInfo CreateStatsicLine(List<BaseDataInfo> list, string lineName, List<string> groupNames)
+        {
+            var subList = list.Where(x => groupNames.Contains(x.技能组)).ToList();
+            subList.ForEach(x => x.Tag = lineName);
+            var linfo = subList.GroupBy(x => x.Tag).Select(x => new BaseDataInfo()
+            {
+                技能组 = lineName,
+                录音抽检数 = x.Sum(y => y.录音抽检数),
+                平均得分 = x.Average(y => y.平均得分),
+                中度服务瑕疵量 = x.Sum(y => y.中度服务瑕疵量),
+                重大服务失误量 = x.Sum(y => y.重大服务失误量),
+                有效投诉量 = x.Sum(y => y.有效投诉量),
+                XX = x.Sum(y => y.XX),
+                总接听量 = x.Sum(y => y.总接听量),
+                满意 = x.Sum(y => y.满意),
+                不满意 = x.Sum(y => y.不满意),
+                一般 = x.Sum(y => y.一般),
+                总量 = x.Sum(y => y.总量),
+                通过量 = x.Sum(y => y.通过量)
+                //gg = 0,
+                // 通过率 = GetRate(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数)),
+                // 满意度系数 = GetFactor(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数))
+            }).FirstOrDefault();
+            return linfo;
+        }
 
         public static void Compute(List<BaseDataInfo> list)
         {

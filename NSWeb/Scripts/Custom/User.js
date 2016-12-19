@@ -4,9 +4,32 @@
     //    $("")
     //});
 });
+function filterGroups() {
+    var filterData = $("#tb_filter").val();
+    var filterData = trimStr(filterData).toLowerCase();
+    $("#list_group a").each(function () {
+        if (filterData == '') {
+            $(this).removeClass("hide_Item");
+        }
+        else {
+            if ($(this).html().toLowerCase().indexOf(filterData) == -1) {
+                $(this).addClass("hide_Item");
+            }
+        }
+    });
+}
+function trimStr(str) {
+    return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
 function GetDataShowTable(data) {
     //alert(data);
     $("#h_curentGroup").val(decodeURI(data));
+    $("#h_curentGroup_Title").html(decodeURI(data));
+    //if ($("#btn_AddUser").hasClass("hide_Item")) {
+    $("#btn_AddUser").removeClass("hide_Item");
+    $("#btn_RemoveGroup").removeClass("hide_Item");
+   // }
     $.ajax({
         async: false,
         type: "Get",
@@ -124,6 +147,10 @@ function SaveUser() {
     datas.Name = $("#tb_Name").val();
     datas.InTime = $("#tb_Time").val();
     var group = $("#s_groupList").val();
+    if (datas.Id == '' || datas.Name == '' ||  datas.group == '') {
+        alert("信息填写不完整");
+        return;
+    }
     datas.GroupName = group;
 
     datas = window.JSON.stringify(datas);
@@ -152,4 +179,48 @@ function SaveUser() {
     }
     else
         alert("用户ID不正确");
+}
+
+function OpGroup(op)
+{
+    var name = "";
+    if (op == 0) {
+        if (!confirm("确实要删除吗")) {
+            return;
+        }
+        name = $("#h_curentGroup").val();
+    }
+    else {
+        name = prompt("输入组名");
+        if (name == '') {
+            alert("组名不能为空");
+            return;
+        }
+    }
+    var datas = new Object();
+    datas.Name = name;
+    datas.op = op;
+
+    datas = window.JSON.stringify(datas);
+
+    $.ajax({
+        async: false,
+        type: "Post",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        url: '/user/op',
+        data: datas,
+        success: function (data) {
+
+            var responseData = data;
+            // alert(responseData.length);
+            if (data.IsSuccess = "true") {
+                alert("操作成功");
+                location.reload();
+            }
+        },
+        error: function (data) {
+            alert("errorText:" + data.message);
+        }
+    });
 }

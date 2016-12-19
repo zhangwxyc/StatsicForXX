@@ -26,6 +26,8 @@ namespace NSWeb
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/bootstrap-switch.css",
+                      "~/Content/fileinput.css",
                       "~/Content/site.css"));
         }
     }

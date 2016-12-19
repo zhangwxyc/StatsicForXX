@@ -6,7 +6,14 @@
 <div class="row">
     <div class="col-md-3 maintable">
         <div class="panel panel-default">
-            <div class="panel-heading">Groups</div>
+            <div class="panel-heading">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class='glyphicon glyphicon-search'></span>
+                    </div>
+                    <input class="form-control" type="text" placeholder="过滤器" onkeyup="filterGroups()" id="tb_filter">
+                </div>
+            </div>
             <div class="panel-body">
                 <ul class="list-group" id="list_group">
                     @{
@@ -17,21 +24,30 @@
                             <a onclick="GetDataShowTable('@(HttpUtility.UrlEncode(item.Name,System.Text.Encoding.UTF8))')" href="#" class="list-group-item">@item.ParentName</a>
                         }
                     }
+                    <li class="list-group-item">
+                        <button type="button" class="btn btn-default" onclick="newGroup()">
+                            <span class='glyphicon glyphicon-plus'></span>增加一个组
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="col-md-9">
-        <h2 id=""></h2>
+        <h2 id="h_curentGroup_Title"></h2>
         <input type="hidden" id="h_curentGroup" />
-        <button type="button" class="btn btn-default btn-lg" onclick="UserDig('0')">
-            <span class='glyphicon glyphicon-plus'></span>
-        </button>
 
         <div id="tb_Users">
 
         </div>
-        <table class="table table-bordered" id="UserList"></table>
+        @*<table class="table table-bordered" id="UserList"></table>*@
+        <button type="button" class="btn btn-default  hide_Item" onclick="UserDig('0')" id="btn_AddUser">
+            <span class='glyphicon glyphicon-plus'></span> 增加本组用户
+        </button>
+        <button type="button" class="btn btn-default  hide_Item rightTitle" onclick="UserDig('0')" id="btn_RemoveGroup">
+            <span class="glyphicon glyphicon-trash"></span> 删除本组
+        </button>
+
     </div>
 </div>
 
@@ -43,55 +59,55 @@
                 <h4 class="modal-title" id="div_opTitle"></h4>
             </div>
             <div class="modal-body">
-            
-                    <input id="h_curop" type="hidden" />
 
-                    <div class="row tabRow">
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <span class="input-group-addon tabLab">
-                                    Num:
-                                </span>
-                                <input type="text" class="form-control" id="tb_Num">
-                            </div><!-- /input-group -->
-                        </div><!-- /.col-lg-6 -->
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <span class="input-group-addon tabLab">
-                                    姓名：
-                                </span>
-                                <input type="text" class="form-control" id="tb_Name">
-                            </div><!-- /input-group -->
-                        </div><!-- /.col-lg-6 -->
-                    </div><!-- /.row -->
-                    <div class="row tabRow">
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <span class="input-group-addon tabLab">
-                                    InTime:
-                                </span>
-                                <input type="text" class="form-control" id="tb_Time">
-                            </div><!-- /input-group -->
-                        </div><!-- /.col-lg-6 -->
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <span class="input-group-addon tabLab">
-                                    group：
-                                </span>
-                                <select id="s_groupList">
-                                    @{
-                                        foreach (var item in infos)
-                                        {
-                                            @:
-                                            <option value="@item.Name">@item.ParentName</option>
-                                        }
+                <input id="h_curop" type="hidden" />
+
+                <div class="row tabRow">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon tabLab">
+                                Num:
+                            </span>
+                            <input type="text" class="form-control" id="tb_Num" placeholder="工号">
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon tabLab">
+                                姓名：
+                            </span>
+                            <input type="text" class="form-control" id="tb_Name" placeholder="姓名">
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                <div class="row tabRow">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon tabLab">
+                                InTime:
+                            </span>
+                            <input type="text" class="form-control" id="tb_Time" placeholder="入职时间">
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon tabLab">
+                                group：
+                            </span>
+                            <select id="s_groupList">
+                                @{
+                                    foreach (var item in infos)
+                                    {
+                                        @:
+                                        <option value="@item.Name">@item.ParentName</option>
                                     }
-                                </select>
-                            </div><!-- /input-group -->
-                        </div><!-- /.col-lg-6 -->
-                    </div><!-- /.row -->
+                                }
+                            </select>
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
 
-              
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

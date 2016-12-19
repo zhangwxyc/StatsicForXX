@@ -17,11 +17,11 @@ namespace NSWeb.Controllers
         {
             var sInfos = DBContext.StatsicInfo.Where(x => x.IsDel != 1).ToList();
             var gInfos = DBContext.GroupInfo.Where(x => x.IsDel != 1).ToList();
-            
+
             gInfos.ForEach(x => x.ParentName = GetGoodName(x.Name));
             var infos = sInfos.Select(x => new StatsicsViewModels()
                 {
-                    GroupName = x.StatsicName,
+                    StatsicLineName = x.StatsicName,
                     Datas = GetDatas(x.StatsicName, gInfos)
                 }).ToList();
 
@@ -51,7 +51,8 @@ namespace NSWeb.Controllers
         private string GetGoodName(string name)
         {
             string firstL = StatsisLib.PinYinHelper.GetChineseSpell(name);
-            return string.Format("{0} {1}", firstL.Substring(0, 1), name);
+            return firstL;
+            //return string.Format("{0} {1}", firstL.Substring(0, 1), name);
         }
         //private Dictionary<GroupInfo, int> GetDatas(string name, List<GroupInfo> gInfos)
         //{
@@ -74,13 +75,13 @@ namespace NSWeb.Controllers
             {
                 foreach (var dTag in NSWeb.Common.STag.DomainTags)
                 {
-                    
+
                 }
             }
         }
 
-        [ActionName("add")]
-        public JsonResult AddStatsicLine(string statsicName)
+        [ActionName("op")]
+        public JsonResult AddStatsicLine(string statsicName, int op)
         {
             Common.ResultInfo rInfo = new Common.ResultInfo();
             if (string.IsNullOrWhiteSpace(statsicName))
@@ -93,15 +94,38 @@ namespace NSWeb.Controllers
             {
 
                 var currentInfo = DBContext.StatsicInfo.FirstOrDefault(x => x.StatsicName == statsicName);
-                if (currentInfo == null)
+                if (op == 1)
                 {
-                    DBContext.StatsicInfo.Add(currentInfo);
-                    DBContext.SaveChanges();
-                    rInfo.IsSuccess = true;
+                    if (currentInfo == null)
+                    {
+                        currentInfo = new StatsicInfo() { StatsicName = statsicName, IsDel = 0 };
+                        DBContext.StatsicInfo.Add(currentInfo);
+                        DBContext.SaveChanges();
+                        rInfo.IsSuccess = true;
+                    }
+                    else if (currentInfo.IsDel == 1)
+                    {
+                        currentInfo.IsDel = 0;
+                        DBContext.SaveChanges();
+                        rInfo.IsSuccess = true;
+                    }
+                    else
+                    {
+                        rInfo.Message = string.Format("{0} 已存在", statsicName);
+                    }
                 }
                 else
                 {
-                    rInfo.Message = string.Format("{0} 已存在", statsicName);
+                    if (currentInfo != null)
+                    {
+                        currentInfo.IsDel = 1;
+                        DBContext.SaveChanges();
+                        rInfo.IsSuccess = true;
+                    }
+                    else
+                    {
+                        rInfo.Message = string.Format("没有 {0}", statsicName);
+                    }
                 }
             }
             catch (Exception ex)
