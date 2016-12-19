@@ -264,6 +264,10 @@ namespace StatsisLib
                 // 通过率 = GetRate(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数)),
                 // 满意度系数 = GetFactor(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数))
             }).FirstOrDefault();
+            if (linfo==null)
+            {
+                return new BaseDataInfo() { 技能组=lineName };
+            }
             return linfo;
         }
 

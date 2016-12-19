@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -15,14 +16,14 @@ namespace UnionLib
             DataProvider = new ProviderWithDB();
         }
         public List<BaseDataInfo> SrcInfos { get; set; }
-        public string Create(string absoluFilePath)
+        public string Create(string absoluFilePath, string outputPath = "")
         {
             var dt = NPOIHelper.ImportExceltoDt(absoluFilePath, 0, 0);
             SrcInfos = StatsisLib.Common.DTToList<BaseDataInfo>(dt);
 
             //SrcInfos = FilterUsers(SrcInfos);
             var DestInfos = WatshData(SrcInfos);//洗
-           // DataProcess.Compute(DestInfos);//基础计算
+            // DataProcess.Compute(DestInfos);//基础计算
 
             List<DataTable> ds = new List<DataTable>()
             {
@@ -37,9 +38,20 @@ namespace UnionLib
             };
 
             RenameTableName(ds);
-            string randPath = absoluFilePath;
-            return absoluFilePath;
+            if (string.IsNullOrWhiteSpace(outputPath))
+            {
+                outputPath = GetOutputPath(absoluFilePath);
+            }
+            NPOIHelper.ExportSimple(ds, outputPath);
+            return outputPath;
+        }
 
+        private string GetOutputPath(string absoluFilePath)
+        {
+            string dir = Path.GetDirectoryName(absoluFilePath);
+            string name = string.Format("{0}_Anaysle.xls", Path.GetFileNameWithoutExtension(absoluFilePath));
+            string fullPath = Path.Combine(dir, name);
+            return fullPath;
         }
 
         /// <summary>
