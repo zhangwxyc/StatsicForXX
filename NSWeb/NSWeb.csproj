@@ -136,6 +136,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\FilePreview.cs" />
     <Compile Include="Common\ResultInfo.cs" />
     <Compile Include="Common\STag.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -216,6 +217,10 @@
     <ProjectReference Include="..\StatsisLib\StatsisLib.csproj">
       <Project>{58481fe9-7ad3-49ec-beb0-1a16717c8e52}</Project>
       <Name>StatsisLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnionLib\UnionLib.csproj">
+      <Project>{e1ed0046-6f38-43a1-9c53-23f587e1597a}</Project>
+      <Name>UnionLib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

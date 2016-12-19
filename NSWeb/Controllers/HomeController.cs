@@ -1,12 +1,13 @@
-﻿using StatsisLib;
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using StatsisLib;
 using System.Data;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 namespace NSWeb.Controllers
 {
@@ -20,9 +21,19 @@ namespace NSWeb.Controllers
         }
         public ActionResult Main()
         {
-            ViewData["files"] = DBContext.UploadInfo.Where(x => x.IsDel == 0).OrderByDescending(x => x.CreateTime).ToList();
+            //ViewData["files"] = DBContext.UploadInfo.Where(x => x.IsDel == 0).OrderByDescending(x => x.CreateTime).ToList();
             return View("Main");
         }
+        [ActionName("fileList")]
+        public ContentResult GetFileList()
+        {
+            var infos = DBContext.UploadInfo.Where(x => x.IsDel == 0).OrderByDescending(x => x.CreateTime).ToList();
+            var timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
+
+            return Content(JsonConvert.SerializeObject(infos, Formatting.Indented, timeConverter));
+           // return Json(infos, JsonRequestBehavior.AllowGet);
+        }
+
         [ActionName("upload")]
         public JsonResult UpLoad()
         {
@@ -32,36 +43,44 @@ namespace NSWeb.Controllers
                 var files = Request.Files;
                 if (files != null && files.Count > 0)
                 {
-                    foreach (HttpPostedFile item in files)
+                    foreach (string file in Request.Files)
                     {
-                        string saveName = string.Format("{0}_{1}", DateTime.Now.ToString().Replace("-", "").Replace(":", ""), item.FileName);
-                        DBContext.UploadInfo.Add(new DataService.UploadInfo()
-                            {
-                                CreateTime = DateTime.Now,
-                                Name = item.FileName,
-                                SaveName = saveName,
-                                FromIP = Request.UserHostAddress,
-                                FromUser = Request.UserHostName,
-                                IsDel = 0
-                            });
 
-                        using (BinaryReader br = new BinaryReader(item.InputStream))
+                        HttpPostedFileBase item = Request.Files[file] as HttpPostedFileBase;
+
+                        if (item != null && item.ContentLength > 0)
                         {
-                            byte[] datas = br.ReadBytes((int)item.InputStream.Length);
-                            System.IO.File.WriteAllBytes(GetPath(saveName), datas);
+                            string saveName = string.Format("{0}_{1}", DateTime.Now.ToString().Replace("-", "_").Replace(":", "_").Replace("/", "_").Replace(" ", "_"), item.FileName);
+                            DBContext.UploadInfo.Add(new DataService.UploadInfo()
+                                {
+                                    CreateTime = DateTime.Now,
+                                    Name = item.FileName,
+                                    SaveName = saveName,
+                                    FromIP = Request.UserHostAddress,
+                                    FromUser = Request.UserHostName,
+                                    IsDel = 0
+                                });
+                            item.SaveAs(GetPath(saveName));
+                            //using (BinaryReader br = new BinaryReader(item.InputStream))
+                            //{
+                            //    byte[] datas = br.ReadBytes((int)item.InputStream.Length);
+                            //    System.IO.File.WriteAllBytes(GetPath(saveName), datas);
+                            //}
+                            DBContext.SaveChanges();
+                            rInfo.IsSuccess = true;
                         }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                rInfo.Message = ex.Message;
+                Json(rInfo);
             }
             return Json(rInfo);
         }
 
-        [ActionName("down_src")]
+        [ActionName("down_src")] 
         public FileStreamResult DownFile(int id)
         {
             var info = DBContext.UploadInfo.FirstOrDefault(x => x.Id == id);
@@ -74,45 +93,25 @@ namespace NSWeb.Controllers
             return File(fileStream, "application/octet-stream", Server.UrlEncode(info.SaveName));
         }
 
-       // [ActionName("down_Anaysle")]
- //       public FileStreamResult DownFile(int id)
- //       {
- //           var info = DBContext.UploadInfo.FirstOrDefault(x => x.Id == id);
- //           if (info == null)
- //           {
- //               return new FileStreamResult(null, "error");
- //           }
- //           string absoluFilePath = GetPath(info.SaveName);
-           
- //           var dt = NPOIHelper.ImportExceltoDt(absoluFilePath, 0, 0);
- //           var SrcInfos =StatsisLib.Common.DTToList<BaseDataInfo>(dt);
- //           SrcInfos = SrcInfos.Where(x => !string.IsNullOrEmpty(x.姓名)).ToList();
- //           SrcInfos = FilterUsers(SrcInfos);
- //           UpdateDest();
- //           List<DataTable> ds = new List<DataTable>()
- //           {
- //               DataProcess.T1(DestInfos),
- //               DataProcess.T2(DestInfos),
- //               DataProcess.T2_5(DestInfos),
-
- //               DataProcess.T4(DestInfos),
- //               DataProcess.T3(DestInfos),
- //               DataProcess.T5(DestInfos)
- //           };
- //           int index = 0;
- //           string[] names = Common.GetConfig("T_Names").Split(',');
- //           ds.ForEach(x => x.TableName = names[index++]);
- //           NPOIHelper.ExportSimple(ds, "C:\\1q.xlsx");
-
- //var fileStream = new FileStream(absoluFilePath, FileMode.Open);
-
- //           return File(fileStream, "application/octet-stream", Server.UrlEncode(fileName));
- //       }
-
-        private List<StatsisLib.BaseDataInfo> FilterUsers(List<StatsisLib.BaseDataInfo> SrcInfos)
+        [ActionName("down_Anaysle")]
+        public FileStreamResult DownAnaysleFile(int id)
         {
-            throw new NotImplementedException();
+            var info = DBContext.UploadInfo.FirstOrDefault(x => x.Id == id);
+            if (info == null)
+            {
+                return new FileStreamResult(null, "error");
+            }
+            string absoluFilePath = GetPath(info.SaveName);
+
+            UnionLib.AnaysleService service = new UnionLib.AnaysleService();
+            string file = service.Create(absoluFilePath);
+
+            var fileStream = new FileStream(file, FileMode.Open);
+
+            return File(fileStream, "application/octet-stream", Server.UrlEncode(file));
         }
+
+
 
         [ActionName("d")]
         public JsonResult OpGroup(int id)
@@ -146,7 +145,7 @@ namespace NSWeb.Controllers
 
         private string GetPath(string saveName)
         {
-            return Path.Combine(Server.MapPath("~/AppData/Files/"), saveName);
+            return Path.Combine(Server.MapPath("~/App_Data/Files/"), saveName);
         }
 
 
