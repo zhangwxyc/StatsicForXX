@@ -68,6 +68,7 @@
     <Compile Include="DataProcess.cs" />
     <Compile Include="DeepCopy.cs" />
     <Compile Include="MappInfo.cs" />
+    <Compile Include="Models\URInfo.cs" />
     <Compile Include="NestDirectory.cs" />
     <Compile Include="NPOIHelper.cs" />
     <Compile Include="PinYinHelper.cs" />

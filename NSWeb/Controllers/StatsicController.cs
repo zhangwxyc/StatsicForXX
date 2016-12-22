@@ -51,8 +51,8 @@ namespace NSWeb.Controllers
         private string GetGoodName(string name)
         {
             string firstL = StatsisLib.PinYinHelper.GetChineseSpell(name);
-            return firstL;
-            //return string.Format("{0} {1}", firstL.Substring(0, 1), name);
+            //return firstL;
+            return string.Format("{0} {1}", firstL.Substring(0, 1), name);
         }
         //private Dictionary<GroupInfo, int> GetDatas(string name, List<GroupInfo> gInfos)
         //{

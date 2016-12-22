@@ -163,14 +163,15 @@
     <None Include="Properties\PublishProfiles\pb.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\Custom\bootstrap-switch.js" />
-    <Content Include="Scripts\Custom\fileinput.js" />
+    <Content Include="Scripts\Common\bootstrap-switch.js" />
+    <Content Include="Scripts\Common\fileinput.js" />
+    <Content Include="Scripts\Custom\check.js" />
     <Content Include="Scripts\Custom\index.js" />
     <Content Include="Scripts\Custom\Statsic.js" />
     <Content Include="Scripts\Custom\User.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\Custom\zh.js" />
+    <Content Include="Scripts\Common\zh.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -199,6 +200,7 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Statsic\Index.cshtml" />
     <Content Include="Views\Home\Main.cshtml" />
+    <Content Include="Views\User\Check.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Create\" />

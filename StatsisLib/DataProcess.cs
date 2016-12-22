@@ -135,23 +135,26 @@ namespace StatsisLib
         public static DataTable T2(List<BaseDataInfo> list)
         {
             string groups = Common.GetConfig("VIP");
-            var subList = list.Where(x => FilterGroup(x, groups)).ToList();
+            var subList = list.Where(x => FilterGroup(x, groups) && x.IsShield == 0).ToList();
             Compute(subList);
+            subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
             var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), true);
             return dt;
         }
         public static DataTable T2_5(List<BaseDataInfo> list)
         {
             string groups = Common.GetConfig("Media");
-            var subList = list.Where(x => FilterGroup(x, groups)).ToList();
+            var subList = list.Where(x => FilterGroup(x, groups)&&x.IsShield==0).ToList();
             Compute(subList);
+            subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
             var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), true);
             return dt;
         }
         public static DataTable T3(List<BaseDataInfo> list)
         {
-            var subList = list.Where(x => x.IsNew).ToList();
+            var subList = list.Where(x => x.IsNew && x.IsShield == 0).ToList();
             Compute(subList);
+            subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
             var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T3").Split(',').ToList(), true);
             return dt;
         }
@@ -159,7 +162,8 @@ namespace StatsisLib
         {
             string tableHeader = "T2";
 
-            var subList = list.Where(x => !x.IsNew).ToList();
+            var subList = list.Where(x => !x.IsNew && x.IsShield == 0).ToList();
+            subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
             var dt = T0(subList, tableHeader);
             return dt;
         }
@@ -167,7 +171,7 @@ namespace StatsisLib
         private static DataTable T0(List<BaseDataInfo> subList, string tableHeader)
         {
             Compute(subList);
-            subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
+            // subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
             var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig(tableHeader).Split(',').ToList(), true);
             return dt;
         }
@@ -176,8 +180,8 @@ namespace StatsisLib
         {
             string groups = Common.GetConfig("All");
             //var sList = list.Where(x => FilterGroup(x,groups)).ToList();
-            var sList = list;
-            var dt = T0(sList, "T4");
+            var sList = list.Where(x=>x.IsShield==0).OrderByDescending(x => x.平均得分).ToList();
+            var dt = Common.ListToDataTable<BaseDataInfo>(sList, Common.GetConfig("T4").Split(',').ToList(), true);
             return dt;
         }
         public static DataTable T6(List<BaseDataInfo> list)
@@ -264,9 +268,9 @@ namespace StatsisLib
                 // 通过率 = GetRate(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数)),
                 // 满意度系数 = GetFactor(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数))
             }).FirstOrDefault();
-            if (linfo==null)
+            if (linfo == null)
             {
-                return new BaseDataInfo() { 技能组=lineName };
+                return new BaseDataInfo() { 技能组 = lineName };
             }
             return linfo;
         }

@@ -3,6 +3,7 @@
     //$.each(links, function (i, n) {
     //    $("")
     //});
+    $("#tb_IsSheild").bootstrapSwitch();
 });
 function filterGroups() {
     var filterData = $("#tb_filter").val();
@@ -29,7 +30,7 @@ function GetDataShowTable(data) {
     //if ($("#btn_AddUser").hasClass("hide_Item")) {
     $("#btn_AddUser").removeClass("hide_Item");
     $("#btn_RemoveGroup").removeClass("hide_Item");
-   // }
+    // }
     $.ajax({
         async: false,
         type: "Get",
@@ -37,14 +38,17 @@ function GetDataShowTable(data) {
         dataType: "json",
         url: '/user/s?groupName=' + data,
         data: '',
+        cache: false,
         success: function (data) {
 
             var responseData = data;
             // alert(responseData.length);
+            $("#h_uCount").html("(" + responseData.length + ")");
             ShowTable("tb_Users", responseData);
         },
         error: function (data) {
             alert("errorText:" + data.message);
+            $("#h_uCount").html("");
         }
     });
 }
@@ -54,12 +58,21 @@ function ShowTable(cid, obj) {
         return;
     }
     var tab = "<table class='table table-bordered'  id='UserList'>";
-    tab += "<tr><th>Num</th><th>姓名</th><th>Date</th><th>...</th></tr>";
+    tab += "<tr><th>Num</th><th>姓名</th><th>Date</th><th>join</th><th>...</th></tr>";
+    var index = 0;
     $.each(obj, function (i, n) {
-        tab += "<tr><td>" + n.Id + "</td><td>" + n.Name + "</td><td>" + n.InTime + "</td><td>";
+        tab += "<tr title='" + n.Remark + "'><td>" + n.Id + "</td><td>" + n.Name + "</td><td>" + n.InTime + "</td><td>" + (n.IsShield == 0 ? '是' : '否') + "</td><td class='user_td_op'>";
+
         tab += "<a href='javascript:UserDig(&#39;" + n.Id + "&#39;)'><span class='glyphicon glyphicon-edit'></span> </a>";
         tab += "<a href='javascript:DelUser(&#39;" + n.Id + "&#39;)'><span class='glyphicon glyphicon-trash'></span> </a>";
+        if (index > 0) {
+            tab += "<a href='javascript:ChangeP(&#39;" + n.Id + "&#39;,0)'><span class='glyphicon glyphicon-circle-arrow-up'></span> </a>";
+        }
+        if (index < obj.length - 1) {
+            tab += "<a href='javascript:ChangeP(&#39;" + n.Id + "&#39;,1)'><span class='glyphicon glyphicon-circle-arrow-down'></span> </a>";
+        }
         tab += "</td></tr>";
+        index++;
     });
     tab += "</table>";
     // alert(tab);
@@ -80,6 +93,7 @@ function UserDig(obj) {
             dataType: "json",
             url: '/user/u?uid=' + obj,
             data: '',
+            cache: false,
             success: function (data) {
 
                 var responseData = data;
@@ -87,6 +101,11 @@ function UserDig(obj) {
                 $("#tb_Num").val(data.Id);
                 $("#tb_Name").val(data.Name);
                 $("#tb_Time").val(data.InTime);
+
+                $("#tb_Remark").val(data.Remark);
+
+
+              //  $('#tb_IsSheild').bootstrapSwitch('setState',true);// data.IsShield == 0);
                 //$("#s_groupList").val(data.GroupName);
                 //var lastselected= $("#s_groupList").find("attr='selected'");
                 //$.each(obj, function (i, n) {
@@ -113,6 +132,7 @@ function UserDig(obj) {
 }
 function DelUser(obj) {
     $("#h_curUser").val(obj);
+    var group = $("#h_curentGroup").val();
     if (confirm("确定删除吗")) {
         if (obj != "0") {
             $.ajax({
@@ -146,8 +166,10 @@ function SaveUser() {
     datas.Id = $("#tb_Num").val();
     datas.Name = $("#tb_Name").val();
     datas.InTime = $("#tb_Time").val();
+    datas.Remark = $("#tb_Remark").val();
+    datas.IsShield = $("#tb_IsSheild").bootstrapSwitch('state') == true ? 0 : 1;
     var group = $("#s_groupList").val();
-    if (datas.Id == '' || datas.Name == '' ||  datas.group == '') {
+    if (datas.Id == '' || datas.Name == '' || datas.group == '') {
         alert("信息填写不完整");
         return;
     }
@@ -162,6 +184,7 @@ function SaveUser() {
             dataType: "json",
             url: '/user/save',
             data: datas,
+            cache: false,
             success: function (data) {
 
                 var responseData = data;
@@ -181,8 +204,7 @@ function SaveUser() {
         alert("用户ID不正确");
 }
 
-function OpGroup(op)
-{
+function OpGroup(op) {
     var name = "";
     if (op == 0) {
         if (!confirm("确实要删除吗")) {
@@ -210,6 +232,7 @@ function OpGroup(op)
         dataType: "json",
         url: '/user/op',
         data: datas,
+        cache: false,
         success: function (data) {
 
             var responseData = data;
@@ -217,6 +240,36 @@ function OpGroup(op)
             if (data.IsSuccess = "true") {
                 alert("操作成功");
                 location.reload();
+            }
+        },
+        error: function (data) {
+            alert("errorText:" + data.message);
+        }
+    });
+}
+
+function ChangeP(name, op) {
+    var datas = new Object();
+    datas.id = name;
+    datas.op = op;
+
+    datas = window.JSON.stringify(datas);
+    var group = $("#h_curentGroup").val();
+    $.ajax({
+        async: false,
+        type: "Post",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        url: '/user/changePostion',
+        data: datas,
+        cache: false,
+        success: function (data) {
+
+            var responseData = data;
+            // alert(responseData.length);
+            if (data.IsSuccess = "true") {
+                // alert("操作成功");
+                GetDataShowTable(encodeURI(group));
             }
         },
         error: function (data) {

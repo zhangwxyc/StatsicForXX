@@ -42,7 +42,7 @@ namespace StatsisLib
         #endregion
 
         #region compute
-        public double 通过率系数{ get; set; }
+        public double 通过率系数 { get; set; }
 
         public string 通过率 { get; set; }
 
@@ -67,15 +67,20 @@ namespace StatsisLib
                     return false;
                 }
                 DateTime dt = DateTime.Now;
-                if(!DateTime.TryParse(新人上岗时间, out dt))
+                DateTime startMonth = dt.AddDays(1 - dt.Day);
+
+                if (!DateTime.TryParse(新人上岗时间, out dt))
                 {
                     return false;
                 }
 
-                return dt.AddMonths(6) > DateTime.Now;
+
+                return dt.AddMonths(7) > startMonth;
             }
         }
 
+        public int OrderIndex { get; set; }
 
+        public int IsShield { get; set; }
     }
 }

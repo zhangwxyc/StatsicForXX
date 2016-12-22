@@ -24,7 +24,7 @@ namespace UnionLib
             //SrcInfos = FilterUsers(SrcInfos);
             var DestInfos = WatshData(SrcInfos);//洗
             // DataProcess.Compute(DestInfos);//基础计算
-
+            
             List<DataTable> ds = new List<DataTable>()
             {
                 CreateMainTable(DestInfos),
@@ -73,6 +73,8 @@ namespace UnionLib
                     {
                         item.技能组 = uInfo.GroupName;
                         item.新人上岗时间 = uInfo.InTime;
+                        item.OrderIndex = uInfo.OrderIndex;
+                        item.IsShield = uInfo.IsShield;
                         infos.Add(item);
                     }
                 }
@@ -89,10 +91,11 @@ namespace UnionLib
             return DataProcess.T6(infos);
         }
 
-        private static List<BaseDataInfo> GetGroupStatsicLine(List<BaseDataInfo> dataInfos)
+        private List<BaseDataInfo> GetGroupStatsicLine(List<BaseDataInfo> dataInfos)
         {
             List<BaseDataInfo> infos = new List<BaseDataInfo>();
-            var extDatas = dataInfos.GroupBy(x => x.技能组).ToDictionary(x => x.Key, x => x.ToList());
+            var extDatas = dataInfos.GroupBy(x => x.技能组).ToDictionary(x => x.Key, x => x.OrderBy(y => y.OrderIndex).ToList());
+            extDatas = extDatas.OrderBy(x => GetIndex(x.Key)).ToDictionary(x => x.Key, x => x.Value);
             foreach (var item in extDatas)
             {
                 infos.AddRange(item.Value);
@@ -100,6 +103,11 @@ namespace UnionLib
                 infos.Add(subLine);
             }
             return infos;
+        }
+
+        private int GetIndex(string key)
+        {
+            return DataProvider.GetGroupIndex(key);
         }
 
         private List<BaseDataInfo> GetStatsicLines(List<BaseDataInfo> dataInfos)

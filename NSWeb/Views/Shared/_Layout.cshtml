@@ -7,7 +7,7 @@
     <title>@ViewBag.Title - 我的 ASP.NET 应用程序</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -24,6 +24,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("主页", "Index", "Home")</li>
                     <li>@Html.ActionLink("主页", "Main", "Home")</li>
+                    <li>@Html.ActionLink("校对", "Check", "User")</li>
                     <li>@Html.ActionLink("组管理", "Index", "User")</li>
                     <li>@Html.ActionLink("统计行管理", "Index", "Statsic")</li>
                 </ul>
@@ -39,9 +40,8 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/custom")
-    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/custom")    @RenderSection("scripts", required: false)
 </body>
 </html>

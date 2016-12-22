@@ -32,8 +32,23 @@ namespace UnionLib
                     Num = x.Id.ToString(),
                     Name = x.Name,
                     InTime = x.InTime,
-                    GroupName = x.GroupName
+                    GroupName = x.GroupName,
+                    OrderIndex = x.OrderIndex ?? 0
+                    ,
+                    Remark = x.Remark,
+                    IsShield = x.IsShield ?? 0
                 }).ToList();
+        }
+
+
+        public int GetGroupIndex(string key)
+        {
+            var info = DBContext.GroupInfo.FirstOrDefault(x => x.Name == key);
+            if (info == null)
+            {
+                return 0;
+            }
+            return info.OrderIndex ?? 0;
         }
     }
 }

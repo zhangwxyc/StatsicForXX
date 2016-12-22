@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="col-md-9">
-        <h2 id="h_curentGroup_Title"></h2>
+        <h2 id="h_curentGroup_Title"></h2><h3 id="h_uCount"></h3>
         <input type="hidden" id="h_curentGroup" />
 
         <div id="tb_Users">
@@ -106,7 +106,24 @@
                         </div><!-- /input-group -->
                     </div><!-- /.col-lg-6 -->
                 </div><!-- /.row -->
-
+                <div class="row tabRow">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon tabLab">
+                                Remark:
+                            </span>
+                            <input type="text" class="form-control" id="tb_Remark" placeholder="备注">
+                        </div><!-- /input-group -->
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon tabLab">
+                                参与考核：
+                            </span>
+                                <input type="checkbox" id="tb_IsSheild" data-size="small" />
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                </div>
 
             </div>
             <div class="modal-footer">
@@ -116,3 +133,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<script src="~/Scripts/Custom/User.js"></script>

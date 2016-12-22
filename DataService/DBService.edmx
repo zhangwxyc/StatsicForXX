@@ -69,6 +69,9 @@
           <Property Name="InTime" Type="nvarchar" MaxLength="500" />
           <Property Name="GroupName" Type="nvarchar" MaxLength="500" />
           <Property Name="IsDel" Type="int" />
+          <Property Name="OrderIndex" Type="int" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="1000" />
+          <Property Name="IsShield" Type="int" />
         </EntityType>
         <EntityContainer Name="DBServicesStoreContainer">
           <EntitySet Name="GroupInfo" EntityType="Self.GroupInfo" Schema="dbo" store:Type="Tables" />
@@ -127,6 +130,9 @@
           <Property Name="InTime" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="GroupName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IsDel" Type="Int32" />
+          <Property Name="OrderIndex" Type="Int32" />
+          <Property Name="Remark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="IsShield" Type="Int32" />
         </EntityType>
         <EntityType Name="StatsicInfo">
           <Key>
@@ -187,6 +193,9 @@
           <EntitySetMapping Name="UserInfo">
             <EntityTypeMapping TypeName="DBServices.UserInfo">
               <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="IsShield" ColumnName="IsShield" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
                 <ScalarProperty Name="IsDel" ColumnName="IsDel" />
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
                 <ScalarProperty Name="InTime" ColumnName="InTime" />

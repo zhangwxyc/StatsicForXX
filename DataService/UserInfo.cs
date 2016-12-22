@@ -19,5 +19,8 @@ namespace DataService
         public string InTime { get; set; }
         public string GroupName { get; set; }
         public Nullable<int> IsDel { get; set; }
+        public Nullable<int> OrderIndex { get; set; }
+        public string Remark { get; set; }
+        public Nullable<int> IsShield { get; set; }
     }
 }

@@ -13,5 +13,11 @@ namespace StatsisLib
 
         public string InTime { get; set; }
         public string GroupName { get; set; }
+
+        public int OrderIndex { get; set; }
+
+        public string Remark { get; set; }
+
+        public int IsShield { get; set; }
     }
 }
