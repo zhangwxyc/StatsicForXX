@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<div id="d_select">
+    @{
+        var infos = ViewData["fileList"] as List<DataService.UploadInfo>;
+        if (infos == null || infos.Count == 0)
+        {
+            <p>No files!</p>
+        }
+        else
+        {
+            <select id="s_fileList">
+                <option value="0">--请选择文件--</option>
+                @foreach (var item in infos)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        }
+    }
+</div>
+<button type="button" class="btn btn-default" onclick=" Refresh()">刷新</button>
+<input type="checkbox" id="tb_IsSheild" data-size="small" />
+<button type="button" class="btn btn-default" onclick=" ReSet()">重置</button>
+
+<div id="d_bdt"></div>
+<script src="~/Scripts/Custom/custom.js"></script>

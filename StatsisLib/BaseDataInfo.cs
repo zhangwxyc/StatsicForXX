@@ -82,5 +82,26 @@ namespace StatsisLib
         public int OrderIndex { get; set; }
 
         public int IsShield { get; set; }
+
+        public bool IsHidden
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(新人上岗时间))
+                {
+                    return false;
+                }
+                DateTime dt = DateTime.Now;
+                DateTime startMonth = dt.AddDays(1 - dt.Day);
+
+                if (!DateTime.TryParse(新人上岗时间, out dt))
+                {
+                    return false;
+                }
+
+
+                return dt.AddMonths(1) > startMonth;
+            }
+        }
     }
 }

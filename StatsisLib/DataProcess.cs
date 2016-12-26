@@ -127,7 +127,8 @@ namespace StatsisLib
         {
             var sumLines = SumLine(list);
             Compute(sumLines);
-            var resultData = sumLines.OrderByDescending(x => x.平均得分).ThenByDescending(x => x.通过率).ToList();
+            //var resultData = sumLines.OrderByDescending(x => x.平均得分).ThenByDescending(x => x.通过率).ToList();
+            var resultData = sumLines.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
             var dt = Common.ListToDataTable<BaseDataInfo>(resultData, Common.GetConfig("T1").Split(',').ToList(), false);
             return dt;
         }
@@ -144,7 +145,7 @@ namespace StatsisLib
         public static DataTable T2_5(List<BaseDataInfo> list)
         {
             string groups = Common.GetConfig("Media");
-            var subList = list.Where(x => FilterGroup(x, groups)&&x.IsShield==0).ToList();
+            var subList = list.Where(x => FilterGroup(x, groups) && x.IsShield == 0).ToList();
             Compute(subList);
             subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
             var dt = Common.ListToDataTable<BaseDataInfo>(subList, Common.GetConfig("T2").Split(',').ToList(), true);
@@ -161,8 +162,9 @@ namespace StatsisLib
         public static DataTable T4(List<BaseDataInfo> list)
         {
             string tableHeader = "T2";
-
-            var subList = list.Where(x => !x.IsNew && x.IsShield == 0).ToList();
+            string groups = Common.GetConfig("VIP") + "," + Common.GetConfig("Media");
+            var subList = list.Where(x => !x.IsNew && x.IsShield == 0
+                && !FilterGroup(x, groups)).ToList();
             subList = subList.OrderByDescending(x => RateToDouble(x.通过率)).ThenByDescending(x => RateToDouble(x.净满意度)).ToList();
             var dt = T0(subList, tableHeader);
             return dt;
@@ -180,7 +182,7 @@ namespace StatsisLib
         {
             string groups = Common.GetConfig("All");
             //var sList = list.Where(x => FilterGroup(x,groups)).ToList();
-            var sList = list.Where(x=>x.IsShield==0).OrderByDescending(x => x.平均得分).ToList();
+            var sList = list.Where(x => x.IsShield == 0).OrderByDescending(x => x.平均得分).ToList();
             var dt = Common.ListToDataTable<BaseDataInfo>(sList, Common.GetConfig("T4").Split(',').ToList(), true);
             return dt;
         }
@@ -288,7 +290,20 @@ namespace StatsisLib
                 item.通过率系数 = GetPII(item);
             }
         }
+        public static void ComputeV2(List<BaseDataInfo> list)
+        {
+            foreach (var item in list)
+            {
+                item.录音抽检数 = item.通过量 + item.中度服务瑕疵量 + item.重大服务失误量;
+                item.通过率 = GetPassRate(item);
+                item.满意度系数 = GetSII(item);
 
+                item.客户评价率 = GetEvalRate(item);
+                item.客户满意度 = GetSI(item);
+                item.净满意度 = GetJSI(item);
+                item.通过率系数 = GetPII(item);
+            }
+        }
         public static double RateToDouble(string rate)
         {
             if (string.IsNullOrEmpty(rate))

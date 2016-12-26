@@ -46,6 +46,18 @@ namespace UnionLib
             return outputPath;
         }
 
+        public List<BaseDataInfo> GetSumLineTable(string path)
+        {
+            var dt = NPOIHelper.ImportExceltoDt(path, 0, 0);
+            SrcInfos = StatsisLib.Common.DTToList<BaseDataInfo>(dt);
+            var DestInfos = WatshData(SrcInfos);//洗
+            var sumLines = DataProcess.SumLine(DestInfos);
+            DataProcess.Compute(sumLines);
+            var resultData = sumLines.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
+            return resultData;
+
+        }
+
         private string GetOutputPath(string absoluFilePath)
         {
             string dir = Path.GetDirectoryName(absoluFilePath);
@@ -65,6 +77,10 @@ namespace UnionLib
             var infos = new List<BaseDataInfo>();
             foreach (var item in dataInfos)
             {
+                if (item.总接听量==0||item.录音抽检数==0)
+                {
+                    continue;
+                }
                 string num = item.工号;
                 if (!string.IsNullOrWhiteSpace(num))
                 {

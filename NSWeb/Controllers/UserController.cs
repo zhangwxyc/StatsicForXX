@@ -98,13 +98,14 @@ namespace NSWeb.Controllers
                 {
                     uInfo.Name = userInfo.Name;
                     uInfo.InTime = userInfo.InTime;
-                    
+                    uInfo.IsShield = userInfo.IsShield;
+
                     if (uInfo.GroupName != userInfo.GroupName)
                     {
                         uInfo.OrderIndex = maxIndex;
                         uInfo.GroupName = userInfo.GroupName;
                     }
-                    uInfo.Remark = userInfo.Remark;
+                    uInfo.Remark = userInfo.Remark??"";
                     uInfo.IsDel = 0;
                 }
 

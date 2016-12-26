@@ -3,8 +3,54 @@
     //$.each(links, function (i, n) {
     //    $("")
     //});
-    $("#tb_IsSheild").bootstrapSwitch();
+
+    $("#tb_IsSheild").bootstrapSwitch({
+        onText: "自动",
+        offText: "手动",
+        onColor: "success",
+        offColor: "info",
+        size: "small",
+        onSwitchChange: function (event, state) {
+            if (state == true) {
+                setAuto();
+            } else {
+                DelAuto();
+            }
+        }
+    });
+    //$('#tb_IsSheild').on('switch-change', function (e, data) {
+    //    //var $el = $(data.el)
+    //    //  , value = data.value;
+    //    alert(data);
+    //    //console.log(e, $el, value);
+    //});
+
+
+
+    $("#s_fileList").change(function () {
+        var id = $(this).val();
+        if (id == 0) {
+            return;
+        }
+        GetDataShowTable(id);
+
+    });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+var cols = new Array("技能组", "录音抽检数", "平均得分", "通过量", "中度服务瑕疵量", "重大服务失误量", "有效投诉量", "通过率", "通过率系数", "净满意度", "客户评价率");
+
 function filterGroups() {
     var filterData = $("#tb_filter").val();
     var filterData = trimStr(filterData).toLowerCase();
@@ -23,61 +69,152 @@ function trimStr(str) {
     return str.replace(/(^\s*)|(\s*$)/g, "");
 }
 
-function GetDataShowTable(data) {
-    //alert(data);
-    $("#h_curentGroup").val(decodeURI(data));
-    $("#h_curentGroup_Title").html(decodeURI(data));
-    //if ($("#btn_AddUser").hasClass("hide_Item")) {
-    $("#btn_AddUser").removeClass("hide_Item");
-    $("#btn_RemoveGroup").removeClass("hide_Item");
-    // }
+function GetDataShowTable(id) {
+
     $.ajax({
         async: false,
-        type: "Get",
+        type: "Post",
         contentType: "application/json;charset=utf-8",
         dataType: "json",
-        url: '/user/s?groupName=' + data,
+        url: '/custom/f?id=' + id,
         data: '',
         cache: false,
         success: function (data) {
 
             var responseData = data;
             // alert(responseData.length);
-            $("#h_uCount").html("(" + responseData.length + ")");
-            ShowTable("tb_Users", responseData);
+            ShowTable("d_bdt", responseData);
         },
         error: function (data) {
-            alert("errorText:" + data.message);
-            $("#h_uCount").html("");
+            alert("errorText:" + data.responseText);
         }
     });
 }
+function GetReadTB(data) {
+    return "<td>" + data + "</td>";
+}
+function GetWriteTB(gName, colName, data) {
+    return "<td><input type='number' class='gUserList_input' gdata='" + gName + "' colName='" + colName + "'  value='" + data + "'/></td>";
+}
+var canEditArray = new Array(3, 4, 5, 6);
 function ShowTable(cid, obj) {
     if (obj.length == 0) {
         $("#" + cid).html("<p>no users !</p>");
         return;
     }
-    var tab = "<table class='table table-bordered'  id='UserList'>";
-    tab += "<tr><th>Num</th><th>姓名</th><th>Date</th><th>join</th><th>...</th></tr>";
+    var tab = "<table class='table table-bordered'  id='gUserList'>";
+    tab += "<tr>";
+    for (var colIndex = 0; colIndex < cols.length; colIndex++) {
+        //tab += "<th>" + cols[colIndex] + "</th>";
+    }
+    tab += "</tr>";
     var index = 0;
     $.each(obj, function (i, n) {
-        tab += "<tr title='" + n.Remark + "'><td>" + n.Id + "</td><td>" + n.Name + "</td><td>" + n.InTime + "</td><td>" + (n.IsShield == 0 ? '是' : '否') + "</td><td class='user_td_op'>";
+        tab += "<tr title='.'>";
 
-        tab += "<a href='javascript:UserDig(&#39;" + n.Id + "&#39;)'><span class='glyphicon glyphicon-edit'></span> </a>";
-        tab += "<a href='javascript:DelUser(&#39;" + n.Id + "&#39;)'><span class='glyphicon glyphicon-trash'></span> </a>";
-        if (index > 0) {
-            tab += "<a href='javascript:ChangeP(&#39;" + n.Id + "&#39;,0)'><span class='glyphicon glyphicon-circle-arrow-up'></span> </a>";
+        for (var colIndex = 0; colIndex < cols.length; colIndex++) {
+            if (canEditArray.indexOf(colIndex) != -1) {
+                tab += GetWriteTB(n.技能组, cols[colIndex], n[cols[colIndex]]);
+            }
+            else {
+                tab += GetReadTB(n[cols[colIndex]]);
+            }
         }
-        if (index < obj.length - 1) {
-            tab += "<a href='javascript:ChangeP(&#39;" + n.Id + "&#39;,1)'><span class='glyphicon glyphicon-circle-arrow-down'></span> </a>";
-        }
-        tab += "</td></tr>";
+
+        //tab += GetReadTB(n.技能组);
+        //tab += GetWriteTB(n.技能组, 2, n.录音抽检数);
+        //tab += GetReadTB(n.平均得分);
+        //tab += GetWriteTB(n.技能组, 2, n.通过量);
+        //tab += GetWriteTB(n.技能组, 2, n.中度服务瑕疵量);
+        //tab += GetWriteTB(n.技能组, 2, n.重大服务失误量);
+        //tab += GetWriteTB(n.技能组, 2, n.有效投诉量);
+        //tab += GetReadTB(n.通过率);
+        //tab += GetReadTB(n.通过率系数);
+        //tab += GetReadTB(n.客户评价率);
+        tab += "</tr>";
         index++;
     });
     tab += "</table>";
-    // alert(tab);
+    // alert(tab);平均得分	通过量	中度服务瑕疵量	重大服务失误量	有效投诉量	通过率	通过率系数	净满意度	客户评价率
+
     $("#" + cid).html(tab);
+
+    if ($("#tb_IsSheild").bootstrapSwitch('state') == true) {
+        setAuto();
+    }
 }
+
+function Refresh() {
+    var id = $("#s_fileList").val();
+    if (id == 0) {
+        return;
+    }
+    var info = new Object();
+    var datas = "";
+    $("#gUserList input[type='number']").each(function (i, n) {
+        datas += $(this).attr("gdata") + "|" + $(this).attr("colName") + "|" + $(this).val() + "\n";
+    });
+    info.Datas = datas;
+    info.Id = id;
+
+    $.ajax({
+        async: false,
+        type: "Post",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        url: '/custom/Refresh',
+        data: window.JSON.stringify(info),
+        cache: false,
+        success: function (data) {
+
+            var id = $("#s_fileList").val();
+            if (id != 0) {
+                GetDataShowTable(id);
+            }
+        },
+        error: function (data) {
+            alert("errorText:" + data.responseText);
+        }
+    });
+}
+function ReSet() {
+    var id = $("#s_fileList").val();
+    if (id == 0) {
+        return;
+    }
+    $.ajax({
+        async: false,
+        type: "Post",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        url: '/custom/f?isReset=true&&id=' + id,
+        data: '',
+        cache: false,
+        success: function (data) {
+
+            var responseData = data;
+            // alert(responseData.length);
+            ShowTable("d_bdt", responseData);
+        },
+        error: function (data) {
+            alert("errorText:" + data.responseText);
+        }
+    });
+}
+
+function setAuto() {
+    $("#gUserList input[type='number']").each(function (i, n) {
+        $(this).attr("onpropertychange", " Refresh()");
+        $(this).attr("oninput", " Refresh()");
+    });
+}
+function DelAuto() {
+    $("#gUserList input[type='number']").each(function (i, n) {
+        $(this).removeAttr("onpropertychange");
+        $(this).removeAttr("oninput");
+    });
+}
+
 function ChangeGroup(obj) {
     $("#h_curUser").val(obj);
     $("#div_ChangeGroup").modal();
@@ -104,7 +241,7 @@ function UserDig(obj) {
 
                 $("#tb_Remark").val(data.Remark);
 
-               // alert(data.IsShield);
+                // alert(data.IsShield);
                 $('#tb_IsSheild').bootstrapSwitch('state', data.IsShield == 0);
                 //$("#s_groupList").val(data.GroupName);
                 //var lastselected= $("#s_groupList").find("attr='selected'");
