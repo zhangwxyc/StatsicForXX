@@ -13,6 +13,7 @@ namespace NSWeb.Controllers
     {
         DataService.QHXEntities DBContext = new DataService.QHXEntities();
 
+        [Authorize]
         public ActionResult Index()
         {
             var infos = DBContext.GroupInfo.Where(x => x.IsDel != 1).OrderBy(x => x.OrderIndex).ToList();
@@ -20,6 +21,7 @@ namespace NSWeb.Controllers
             ViewData["gInfo"] = infos;
             return View();
         }
+        [Authorize]
         public ActionResult Check()
         {
             return View();
@@ -105,7 +107,7 @@ namespace NSWeb.Controllers
                         uInfo.OrderIndex = maxIndex;
                         uInfo.GroupName = userInfo.GroupName;
                     }
-                    uInfo.Remark = userInfo.Remark??"";
+                    uInfo.Remark = userInfo.Remark ?? "";
                     uInfo.IsDel = 0;
                 }
 

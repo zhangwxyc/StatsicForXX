@@ -58,7 +58,35 @@ namespace NSWeb.Controllers
         {
             return string.Format(Server.MapPath("~/App_Data/Files/ansyle_{0}.xml"), id);
         }
+        private string GetDataPath_excel(string id)
+        {
+            return string.Format(Server.MapPath("~/App_Data/Files/ansyle_{0}.xls"), id);
+        }
 
+        [ActionName("down_Anaysle")]
+        public FileStreamResult DownAnaysleFile(int id)
+        {
+
+            string dataPath = GetDataPath(id.ToString());
+            List<StatsisLib.BaseDataInfo> infos = null;
+            if (!System.IO.File.Exists(dataPath))
+            {
+                return null;
+            }
+            else
+            {
+                infos = infos.Deserialize(dataPath);
+            }
+            UnionLib.AnaysleService service = new UnionLib.AnaysleService();
+            var tb = DataProcess.T1_0(infos);
+            tb.TableName = "调整后的";
+            string path = GetDataPath_excel(id.ToString());
+            NPOIHelper.ExportSimple(new List<System.Data.DataTable>() { tb }, path);
+
+            var fileStream = new FileStream(path, FileMode.Open);
+
+            return File(fileStream, "application/octet-stream", Server.UrlEncode(path));
+        }
 
         public class RefreshParam
         {

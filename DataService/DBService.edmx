@@ -31,6 +31,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StatsicName" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="IsDel" Type="int" />
+          <Property Name="OrderIndex" Type="int" />
         </EntityType>
         <EntityType Name="StatsicLineInfo">
           <Key>
@@ -141,6 +142,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StatsicName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IsDel" Type="Int32" />
+          <Property Name="OrderIndex" Type="Int32" />
         </EntityType>
         <EntityType Name="UploadInfo">
           <Key>
@@ -207,6 +209,7 @@
           <EntitySetMapping Name="StatsicInfo">
             <EntityTypeMapping TypeName="DBServices.StatsicInfo">
               <MappingFragment StoreEntitySet="StatsicInfo">
+                <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
                 <ScalarProperty Name="IsDel" ColumnName="IsDel" />
                 <ScalarProperty Name="StatsicName" ColumnName="StatsicName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

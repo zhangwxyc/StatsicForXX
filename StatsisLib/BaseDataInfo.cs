@@ -67,7 +67,8 @@ namespace StatsisLib
                     return false;
                 }
                 DateTime dt = DateTime.Now;
-                DateTime startMonth = dt.AddDays(1 - dt.Day);
+
+                DateTime startMonth = dt.Day < 15 ? dt.AddDays(1 - dt.Day) : dt.AddDays(1 - dt.Day).AddMonths(1);
 
                 if (!DateTime.TryParse(新人上岗时间, out dt))
                 {
@@ -92,7 +93,7 @@ namespace StatsisLib
                     return false;
                 }
                 DateTime dt = DateTime.Now;
-                DateTime startMonth = dt.AddDays(1 - dt.Day);
+                DateTime startMonth = dt.Day < 15 ? dt.AddDays(1 - dt.Day) : dt.AddDays(1 - dt.Day).AddMonths(1);
 
                 if (!DateTime.TryParse(新人上岗时间, out dt))
                 {

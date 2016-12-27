@@ -139,6 +139,8 @@
     <Compile Include="Common\FilePreview.cs" />
     <Compile Include="Common\ResultInfo.cs" />
     <Compile Include="Common\STag.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StatsicController.cs" />
@@ -146,6 +148,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\LoginViewModels.cs" />
     <Compile Include="Models\StatsicsViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -204,6 +207,8 @@
     <Content Include="Views\Home\Main.cshtml" />
     <Content Include="Views\User\Check.cshtml" />
     <Content Include="Views\Custom\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Shared\_Layout_NoLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Create\" />

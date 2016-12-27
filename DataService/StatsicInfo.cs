@@ -17,5 +17,6 @@ namespace DataService
         public int Id { get; set; }
         public string StatsicName { get; set; }
         public Nullable<int> IsDel { get; set; }
+        public Nullable<int> OrderIndex { get; set; }
     }
 }

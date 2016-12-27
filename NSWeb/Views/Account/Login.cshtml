@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout_NoLogin.cshtml";
+}
+
+<h2>验证</h2>
+<div class="jumbotron">
+    <div>
+        <form action="/Account/Login" method="post">
+            <input type="hidden" value="@ViewBag.ReturnUrl" name="ReturnUrl" />
+            <div class="input-group">
+                <input type="password" class="form-control" placeholder="在此输入口令" data-val-required="必需" id="Password" name="Password"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Go!</button>
+                </span>
+            </div><!-- /input-group -->
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    @if(!string.IsNullOrWhiteSpace(ViewBag.Error))
+    {
+        @:alert('@ViewBag.Error');
+    }
+</script>

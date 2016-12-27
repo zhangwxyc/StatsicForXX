@@ -19,6 +19,7 @@ namespace NSWeb.Controllers
         {
             return View();
         }
+        [Authorize]
         public ActionResult Main()
         {
             //ViewData["files"] = DBContext.UploadInfo.Where(x => x.IsDel == 0).OrderByDescending(x => x.CreateTime).ToList();

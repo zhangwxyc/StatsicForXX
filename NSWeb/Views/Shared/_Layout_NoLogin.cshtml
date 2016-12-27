@@ -20,17 +20,6 @@
                 </button>
                 @Html.ActionLink(System.Configuration.ConfigurationManager.AppSettings["SiteName"], "Main", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("主页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("开始", "Main", "Home")</li>
-                    <li>@Html.ActionLink("组管理", "Index", "User")</li>
-                    <li>@Html.ActionLink("统计行管理", "Index", "Statsic")</li>
-                    <li>@Html.ActionLink("统计校对", "Index", "Custom")</li>
-                    <li>@Html.ActionLink("用户校对", "Check", "User")</li>
-                </ul>
-              
-            </div>
         </div>
     </div>
     <div class="container body-content">

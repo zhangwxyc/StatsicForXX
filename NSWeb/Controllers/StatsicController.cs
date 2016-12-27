@@ -13,9 +13,10 @@ namespace NSWeb.Controllers
     {
         DataService.QHXEntities DBContext = new DataService.QHXEntities();
 
+                [Authorize]
         public ActionResult Index()
         {
-            var sInfos = DBContext.StatsicInfo.Where(x => x.IsDel != 1).ToList();
+            var sInfos = DBContext.StatsicInfo.Where(x => x.IsDel != 1).OrderBy(x => x.OrderIndex).ToList();
             var gInfos = DBContext.GroupInfo.Where(x => x.IsDel != 1).ToList();
 
             gInfos.ForEach(x => x.ParentName = GetGoodName(x.Name));
@@ -98,7 +99,9 @@ namespace NSWeb.Controllers
                 {
                     if (currentInfo == null)
                     {
-                        currentInfo = new StatsicInfo() { StatsicName = statsicName, IsDel = 0 };
+                        int count = DBContext.StatsicInfo.Count();
+
+                        currentInfo = new StatsicInfo() { StatsicName = statsicName, IsDel = 0, OrderIndex = count + 1 };
                         DBContext.StatsicInfo.Add(currentInfo);
                         DBContext.SaveChanges();
                         rInfo.IsSuccess = true;

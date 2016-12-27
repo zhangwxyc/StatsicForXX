@@ -3,29 +3,41 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
-<div id="d_select">
-    @{
-        var infos = ViewData["fileList"] as List<DataService.UploadInfo>;
-        if (infos == null || infos.Count == 0)
-        {
-            <p>No files!</p>
-        }
-        else
-        {
-            <select id="s_fileList">
-                <option value="0">--请选择文件--</option>
-                @foreach (var item in infos)
-                {
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </select>
-        }
-    }
+<div class="panel panel-default mainPanel">
+    <div class="panel-heading" style="vertical-align:middle;">
+        <div class="row">
+            <div class="col-md-3">
+                <div id="d_select">
+                    @{
+                        var infos = ViewData["fileList"] as List<DataService.UploadInfo>;
+                        if (infos == null || infos.Count == 0)
+                        {
+                            <p>No files!</p>
+                        }
+                        else
+                        {
+                            <select id="s_fileList">
+                                <option value="0">--请选择文件--</option>
+                                @foreach (var item in infos)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-md-9" style=" text-align:right;">
+                <button type="button" class="btn btn-default" onclick=" Refresh()">刷新</button>
+                <input type="checkbox" id="tb_IsSheild" data-size="small" />
+                <button type="button" class="btn btn-default" onclick=" ReSet()">重置</button>
+                <a id="a_export" title='导出报表'><span class='glyphicon glyphicon-cloud-download'></span> </a>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div id="d_bdt"></div>
+    </div>
 </div>
-<button type="button" class="btn btn-default" onclick=" Refresh()">刷新</button>
-<input type="checkbox" id="tb_IsSheild" data-size="small" />
-<button type="button" class="btn btn-default" onclick=" ReSet()">重置</button>
 
-<div id="d_bdt"></div>
 <script src="~/Scripts/Custom/custom.js"></script>

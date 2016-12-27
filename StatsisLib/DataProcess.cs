@@ -132,7 +132,19 @@ namespace StatsisLib
             var dt = Common.ListToDataTable<BaseDataInfo>(resultData, Common.GetConfig("T1").Split(',').ToList(), false);
             return dt;
         }
-
+        
+        /// <summary>
+        /// 针对现成的数据直接输出
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static DataTable T1_0(List<BaseDataInfo> list)
+        {
+            var resultData = list.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
+            var dt = Common.ListToDataTable<BaseDataInfo>(resultData, Common.GetConfig("T1").Split(',').ToList(), false);
+            return dt;
+        }
+        
         public static DataTable T2(List<BaseDataInfo> list)
         {
             string groups = Common.GetConfig("VIP");

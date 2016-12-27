@@ -32,6 +32,8 @@
         if (id == 0) {
             return;
         }
+        $("#a_export").attr("href", "/Custom/down_Anaysle?id=" + id);
+        //<a href='/home/down_Anaysle?id=" + n.Id + "' title='生成报表'><span class='glyphicon glyphicon-cloud-download'></span> </a>
         GetDataShowTable(id);
 
     });
@@ -105,7 +107,7 @@ function ShowTable(cid, obj) {
     var tab = "<table class='table table-bordered'  id='gUserList'>";
     tab += "<tr>";
     for (var colIndex = 0; colIndex < cols.length; colIndex++) {
-        //tab += "<th>" + cols[colIndex] + "</th>";
+        tab += "<th>" + cols[colIndex] + "</th>";
     }
     tab += "</tr>";
     var index = 0;

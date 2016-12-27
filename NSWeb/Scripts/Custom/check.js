@@ -1,16 +1,16 @@
 ﻿$(function () {
     initFileInput("file_up_2", "/user/upload");
-    alert("CC");
+   // alert("CC");
     $("#file_up_2").on("fileuploaded", function (event, data, previewId, index) {
         if (data == undefined) {
             alert('文件格式类型不正确');
             return;
         }
-        else if (data.IsSuccess == false) {
+        else if (data.response.IsSuccess == false) {
             alert('上传失败');
         }
         else {
-            showFileList("check_m_panel", data.Message);
+            showFileList("check_m_panel", data.response.Message);
             alert('校正成功');
         }
     });
