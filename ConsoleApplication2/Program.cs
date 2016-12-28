@@ -13,6 +13,10 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
+
+            var dat = NPOIHelper.ImportExceltoDt(@"E:\Projects\tt\11s.xls",0,1);
+
+
             DateTime dt = DateTime.Now;
             DateTime startMonth = dt.AddDays(1 - dt.Day);
             Console.WriteLine(startMonth);

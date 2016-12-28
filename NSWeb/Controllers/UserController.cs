@@ -236,7 +236,7 @@ namespace NSWeb.Controllers
                                     GroupName = uItem.组别,
                                     Name = uItem.姓名,
                                     OrderIndex = index,
-                                    InTime = uItem.特殊情况,
+                                    Remark = uItem.特殊情况,
                                     IsDel = 0
                                 };
                                 DBContext.UserInfo.Add(s);
@@ -245,11 +245,12 @@ namespace NSWeb.Controllers
                             else if (s.GroupName != uItem.组别)
                             {
                                 s.IsDel = 0;
-                                s.InTime = uItem.特殊情况;
+
                                 s.GroupName = uItem.组别;
                                 str.AppendFormat("对不上：{0},{1}=>{2}", uItem.工号, s.GroupName, uItem.组别);
                             }
 
+                            s.Remark += uItem.特殊情况;
                             s.OrderIndex = index;
 
                             index++;
@@ -264,7 +265,7 @@ namespace NSWeb.Controllers
                     foreach (var dItem in DBContext.UserInfo.ToList())
                     {
                         var s = urInfos.FirstOrDefault(x => x.工号 == dItem.Id.ToString());
-                        if (s == null)
+                        if (s == null && (dItem.IsDel??0) == 0)
                         {
                             dItem.IsDel = 1;
                             str.AppendFormat("多余：{0}", dItem.Id, dItem.GroupName);

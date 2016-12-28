@@ -18,7 +18,7 @@ namespace UnionLib
         public List<BaseDataInfo> SrcInfos { get; set; }
         public string Create(string absoluFilePath, string outputPath = "")
         {
-            var dt = NPOIHelper.ImportExceltoDt(absoluFilePath, 0, 0);
+            var dt = NPOIHelper.ImportExceltoDt(absoluFilePath, 0, 1);
             SrcInfos = StatsisLib.Common.DTToList<BaseDataInfo>(dt);
 
             //SrcInfos = FilterUsers(SrcInfos);
