@@ -48,7 +48,7 @@ namespace UnionLib
 
         public List<BaseDataInfo> GetSumLineTable(string path)
         {
-            var dt = NPOIHelper.ImportExceltoDt(path, 0, 0);
+            var dt = NPOIHelper.ImportExceltoDt(path, 0, 1);
             SrcInfos = StatsisLib.Common.DTToList<BaseDataInfo>(dt);
             var DestInfos = WatshData(SrcInfos);//洗
             var sumLines = DataProcess.SumLine(DestInfos);
