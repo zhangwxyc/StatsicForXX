@@ -224,6 +224,10 @@
       <Project>{bd04caaf-f12e-4666-b641-b4932b07c302}</Project>
       <Name>DataService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MailLib\MailLib.csproj">
+      <Project>{924a8003-6764-4bd6-b132-30427103dbf0}</Project>
+      <Name>MailLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StatsisLib\StatsisLib.csproj">
       <Project>{58481fe9-7ad3-49ec-beb0-1a16717c8e52}</Project>
       <Name>StatsisLib</Name>

@@ -43,6 +43,8 @@ function showFileList(cid, obj) {
         tab += "<a href='/home/down_src?id=" + n.Id + "' title='下载源数据'><span class='glyphicon glyphicon-cloud'></span> </a>";
         tab += "<a href='javascript:DelFile(&#39;" + n.Id + "&#39;)'  title='删除'><span class='glyphicon glyphicon-trash'></span> </a>";
         tab += "<a href='/home/down_Anaysle?id=" + n.Id + "' title='生成报表'><span class='glyphicon glyphicon-cloud-download'></span> </a>";
+        tab += "<a href='/home/email?id=" + n.Id + "' title='发送'>e </a>";
+
         tab += "</td></tr>";
     });
     tab += "</table>";

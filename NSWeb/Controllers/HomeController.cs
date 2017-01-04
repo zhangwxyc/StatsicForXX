@@ -144,6 +144,52 @@ namespace NSWeb.Controllers
             return Json(rInfo);
         }
 
+        [ActionName("email")]
+        public JsonResult SendTo(int id)
+        {
+            Common.ResultInfo rInfo = new Common.ResultInfo();
+
+            try
+            {
+
+                var currentInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Id == id);
+
+                if (currentInfo != null)
+                {
+                    string absoluFilePath = GetPath(currentInfo.SaveName);
+
+                    UnionLib.AnaysleService service = new UnionLib.AnaysleService();
+                    string file = service.Create(absoluFilePath);
+
+                    var msg = "";
+                    var sendMail = new MailLib.MailHelper("smtp.163.com", 25, "zhangwxyc@163.com", "qwerty123", System.Configuration.ConfigurationManager.AppSettings["toUsers"].Split(','), "how are you", "body is xxxx", false);
+                    sendMail.IsSendAttachments = true;
+                    sendMail.Attachments = new string[] { file };
+                    var s = sendMail.Send(out msg);
+                    if (s==MailLib.MailHelper.SendStatus.Success)
+                    {
+                        rInfo.IsSuccess = true;
+                    }
+                    else
+                    {
+                        rInfo.Message = msg;
+                    }
+                }
+                else
+                {
+                    rInfo.Message = string.Format("没有 {0}", id);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                rInfo.Message = ex.Message;
+            }
+
+            return Json(rInfo,JsonRequestBehavior.AllowGet);
+        }
+
+
         private string GetPath(string saveName)
         {
             return Path.Combine(Server.MapPath("~/App_Data/Files/"), saveName);

@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnionLib", "UnionLib\UnionLib.csproj", "{E1ED0046-6F38-43A1-9C53-23F587E1597A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailServer", "MailServer\MailServer.csproj", "{027DA39F-7E06-48BB-B568-FF8C9635D1C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailLib", "MailLib\MailLib.csproj", "{924A8003-6764-4BD6-B132-30427103DBF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{E1ED0046-6F38-43A1-9C53-23F587E1597A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1ED0046-6F38-43A1-9C53-23F587E1597A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1ED0046-6F38-43A1-9C53-23F587E1597A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{027DA39F-7E06-48BB-B568-FF8C9635D1C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{027DA39F-7E06-48BB-B568-FF8C9635D1C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{027DA39F-7E06-48BB-B568-FF8C9635D1C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{027DA39F-7E06-48BB-B568-FF8C9635D1C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{924A8003-6764-4BD6-B132-30427103DBF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{924A8003-6764-4BD6-B132-30427103DBF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{924A8003-6764-4BD6-B132-30427103DBF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{924A8003-6764-4BD6-B132-30427103DBF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
