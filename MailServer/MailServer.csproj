@@ -91,6 +91,16 @@
   <ItemGroup>
     <Content Include="ConfigFile\jobs.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataService\DataService.csproj">
+      <Project>{bd04caaf-f12e-4666-b641-b4932b07c302}</Project>
+      <Name>DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MailLib\MailLib.csproj">
+      <Project>{924a8003-6764-4bd6-b132-30427103dbf0}</Project>
+      <Name>MailLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

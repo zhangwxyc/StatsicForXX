@@ -14,11 +14,13 @@ namespace ConsoleApplication2
     {
         static void Main(string[] args)
         {
-            var msg = "";
-            var sendMail = new MailHelper("smtp.163.com", 25, "zhangwxyc@163.com", "qwerty123", new string[] { "zhangwxyc@yiche.com" }, "title is hitch send", "body is xxxx", false);
-            sendMail.IsSendAttachments = true;
-            sendMail.Attachments=new string[]{};
-            var s= sendMail.Send(out msg);
+
+            //var sendMail = new MailHelper();
+            //sendMail.AttachmentSavePath = "C:\\";
+            //sendMail.Login();
+
+
+           // SendMail();
 
             //var dat = NPOIHelper.ImportExceltoDt(@"E:\Projects\tt\22.xls", 0, 1);
             //NewMethod4();
@@ -33,6 +35,15 @@ namespace ConsoleApplication2
 
 
 
+        }
+
+        private static void SendMail()
+        {
+            var msg = "";
+            var sendMail = new MailHelper("smtp.163.com", 25, "zhangwxyc@163.com", "qwerty123", new string[] { "zhangwxyc@yiche.com" }, "title is hitch send", "body is xxxx", false);
+            sendMail.IsSendAttachments = true;
+            sendMail.Attachments = new string[] { };
+            var s = sendMail.Send(out msg);
         }
 
         private static void NewMethod4()
