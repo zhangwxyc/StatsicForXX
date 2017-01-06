@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Quartz;
+using Quartz.Impl;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,19 +18,20 @@ namespace MailServer
         static void Main()
         {
 
-
+            
 
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(AppDomain.CurrentDomain.BaseDirectory + @"\ConfigFile\log4net.config"));
-
-            HostFactory.Run(x =>
-            {
-                x.Service<MService>();
-                x.RunAsLocalSystem();
-                x.SetDescription("Quartz+TopShelf实现Windows服务作业调度的一个示例Demo");
-                x.SetDisplayName("QuartzTopShelfDemo服务");
-                x.SetServiceName("QuartzTopShelfDemoService");
-                x.EnablePauseAndContinue();
-            });
+            IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
+            scheduler.Start();
+            //HostFactory.Run(x =>
+            //{
+            //    x.Service<MService>();
+            //    x.RunAsLocalSystem();
+            //    x.SetDescription("Quartz+TopShelf实现Windows服务作业调度的一个示例Demo");
+            //    x.SetDisplayName("QuartzTopShelfDemo服务");
+            //    x.SetServiceName("QuartzTopShelfDemoService");
+            //    x.EnablePauseAndContinue();
+            //});
 
 
 

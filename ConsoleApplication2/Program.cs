@@ -19,7 +19,9 @@ namespace ConsoleApplication2
             //sendMail.AttachmentSavePath = "C:\\";
             //sendMail.Login();
 
-
+            var sendMail = new MailReceiveHelper();
+            sendMail.Init();
+            sendMail.Receive("");
            // SendMail();
 
             //var dat = NPOIHelper.ImportExceltoDt(@"E:\Projects\tt\22.xls", 0, 1);
