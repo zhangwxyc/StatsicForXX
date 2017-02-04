@@ -80,7 +80,51 @@ namespace NSWeb.Controllers
             }
             return Json(rInfo);
         }
+        [ActionName("upload2")]
+        public JsonResult UpLoad2()
+        {
+            Common.ResultInfo rInfo = new Common.ResultInfo();
+            try
+            {
+                var files = Request.Files;
+                if (files != null && files.Count > 0)
+                {
+                    foreach (string file in Request.Files)
+                    {
 
+                        HttpPostedFileBase item = Request.Files[file] as HttpPostedFileBase;
+
+                        if (item != null && item.ContentLength > 0)
+                        {
+                            //string saveName = string.Format("{0}_{1}", DateTime.Now.ToString().Replace("-", "_").Replace(":", "_").Replace("/", "_").Replace(" ", "_"), item.FileName);
+                            //DBContext.UploadInfo.Add(new DataService.UploadInfo()
+                            //    {
+                            //        CreateTime = DateTime.Now,
+                            //        Name = item.FileName,
+                            //        SaveName = saveName,
+                            //        FromIP = Request.UserHostAddress,
+                            //        FromUser = Request.UserHostName,
+                            //        IsDel = 0
+                            //    });
+                            //item.SaveAs(GetPath(saveName));
+                            //using (BinaryReader br = new BinaryReader(item.InputStream))
+                            //{
+                            //    byte[] datas = br.ReadBytes((int)item.InputStream.Length);
+                            //    System.IO.File.WriteAllBytes(GetPath(saveName), datas);
+                            //}
+                            DBContext.SaveChanges();
+                            rInfo.IsSuccess = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                rInfo.Message = ex.Message;
+                Json(rInfo);
+            }
+            return Json(rInfo);
+        }
         [ActionName("down_src")] 
         public FileStreamResult DownFile(int id)
         {

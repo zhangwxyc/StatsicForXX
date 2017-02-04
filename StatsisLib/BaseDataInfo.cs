@@ -57,6 +57,29 @@ namespace StatsisLib
         public string 满意度系数 { get; set; }
         #endregion
 
+        public int 中重
+        {
+            get
+            {
+                return 中度服务瑕疵量 + 重大服务失误量;
+            }
+        }
+
+        public string 未通过量
+        {
+            get
+            {
+                return 中重.ToString();
+            }
+        }
+        public string 评价率是否异常
+        {
+            get
+            {
+                return "";
+            }
+        }
+
 
         public bool IsNew
         {

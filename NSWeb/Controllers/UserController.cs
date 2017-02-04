@@ -198,8 +198,16 @@ namespace NSWeb.Controllers
 
                     string saveName = string.Format("{0}_{1}", DateTime.Now.ToString().Replace("-", "_").Replace(":", "_").Replace("/", "_").Replace(" ", "_"), fileItem.FileName);
 
+                    var ds = StatsisLib.NPOIHelper.ImportExceltoDs(fileItem.InputStream);
 
-                    var dt = StatsisLib.NPOIHelper.ImportExceltoDt(fileItem.InputStream);
+                    List<StatsisLib.Models.URInfo> sheildInfos = new List<StatsisLib.Models.URInfo>();
+                    if (ds.Tables.Count > 1)
+                    {
+                        sheildInfos = StatsisLib.Common.DTToList<StatsisLib.Models.URInfo>(ds.Tables[1]);
+                    }
+
+
+                    var dt = ds.Tables[0];
                     var urInfos = StatsisLib.Common.DTToList<StatsisLib.Models.URInfo>(dt);
 
                     var gInfos = urInfos.Where(x => !x.组别.Contains(x.姓名)).GroupBy(x => x.组别).ToDictionary(x => x.Key, x => x.ToList());
@@ -209,7 +217,7 @@ namespace NSWeb.Controllers
                         var gInfo = DBContext.GroupInfo.FirstOrDefault(x => x.Name == item.Key);
                         if (gInfo == null)
                         {
-                            str.AppendFormat("缺少组：{0}", item.Key);
+                            str.AppendFormat("缺少组：{0}<br/>", item.Key);
                             gInfo = new GroupInfo()
                             {
                                 Name = item.Key,
@@ -240,17 +248,20 @@ namespace NSWeb.Controllers
                                     IsDel = 0
                                 };
                                 DBContext.UserInfo.Add(s);
-                                str.AppendFormat("缺少：{0}", uItem.工号);
+                                str.AppendFormat("缺少：{0}<br/>", uItem.工号);
                             }
                             else if (s.GroupName != uItem.组别)
                             {
-                                s.IsDel = 0;
-
+                                str.AppendFormat("对不上：{0},{1}=>{2}<br/>", uItem.工号, s.GroupName, uItem.组别);
                                 s.GroupName = uItem.组别;
-                                str.AppendFormat("对不上：{0},{1}=>{2}", uItem.工号, s.GroupName, uItem.组别);
                             }
-
-                            s.Remark += uItem.特殊情况;
+                            if (s.IsShield == 1)
+                            {
+                                str.AppendFormat("恢复：{0},{1}<br/>", uItem.组别, uItem.工号);
+                            }
+                            s.IsDel = 0;
+                            s.IsShield = 0;
+                            s.Remark = uItem.特殊情况;
                             s.OrderIndex = index;
 
                             index++;
@@ -262,13 +273,34 @@ namespace NSWeb.Controllers
 
 
 
-                    foreach (var dItem in DBContext.UserInfo.ToList())
+                    foreach (var dItem in DBContext.UserInfo.Where(x=>x.IsDel==0).ToList())
                     {
                         var s = urInfos.FirstOrDefault(x => x.工号 == dItem.Id.ToString());
-                        if (s == null && (dItem.IsDel??0) == 0)
+                        if (s == null && (dItem.IsShield ?? 0) == 0)
                         {
-                            dItem.IsDel = 1;
-                            str.AppendFormat("多余：{0}", dItem.Id, dItem.GroupName);
+                            var sheildItem = sheildInfos.FirstOrDefault(x => x.工号 == dItem.Id.ToString());
+                            if (sheildItem != null)
+                            {
+                                dItem.IsShield = 1;
+                                dItem.Remark =  sheildItem.特殊情况;
+                                str.AppendFormat("不考核：{1}——{0}<br/>", dItem.Id, dItem.GroupName);
+                            }
+                            else
+                            {
+                                dItem.IsDel = 1;
+                                dItem.IsShield = 1;
+                                str.AppendFormat("多余（将删除）：{1}——{0}<br/>", dItem.Id, dItem.GroupName);
+                            }
+                        }
+                        else if (s == null && (dItem.IsShield ?? 0) == 1)
+                        {
+                            var sheildItem = sheildInfos.FirstOrDefault(x => x.工号 == dItem.Id.ToString());
+                            if (sheildItem == null)
+                            {
+                                dItem.IsDel = 1;
+                                dItem.IsShield = 1;
+                                str.AppendFormat("清理（将删除）：{1}——{0}<br/>", dItem.Id, dItem.GroupName);
+                            }
                         }
                     }
 

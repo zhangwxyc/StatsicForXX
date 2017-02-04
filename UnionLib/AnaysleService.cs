@@ -28,7 +28,7 @@ namespace UnionLib
             List<DataTable> ds = new List<DataTable>()
             {
                 CreateMainTable(DestInfos),
-                DataProcess.T1(DestInfos),
+                DataProcess.T1(DestInfos.OrderBy(x => GetIndex(x.技能组)).ToList()),
                 DataProcess.T2(DestInfos),
                 DataProcess.T2_5(DestInfos),
 

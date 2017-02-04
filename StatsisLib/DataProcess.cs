@@ -128,7 +128,9 @@ namespace StatsisLib
             var sumLines = SumLine(list);
             Compute(sumLines);
             //var resultData = sumLines.OrderByDescending(x => x.平均得分).ThenByDescending(x => x.通过率).ToList();
-            var resultData = sumLines.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
+            var resultData = sumLines.ToList();
+           // var resultData = sumLines.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
+
             var dt = Common.ListToDataTable<BaseDataInfo>(resultData, Common.GetConfig("T1").Split(',').ToList(), false);
             return dt;
         }

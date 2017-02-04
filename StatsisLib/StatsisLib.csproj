@@ -63,11 +63,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseDataByDate.cs" />
     <Compile Include="BaseDataInfo.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="DataProcess.cs" />
     <Compile Include="DeepCopy.cs" />
+    <Compile Include="FilterByDateInfo.cs" />
     <Compile Include="MappInfo.cs" />
+    <Compile Include="MinDataInfo.cs" />
     <Compile Include="Models\URInfo.cs" />
     <Compile Include="NestDirectory.cs" />
     <Compile Include="NPOIHelper.cs" />

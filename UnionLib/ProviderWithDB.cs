@@ -27,7 +27,7 @@ namespace UnionLib
         }
         public List<StatsisLib.UserInfo> GetUserInfos(object paramsObj)
         {
-            return DBContext.UserInfo.Where(x => x.IsDel != 1).Select(x => new StatsisLib.UserInfo()
+            return DBContext.UserInfo.Where(x => x.IsDel != 1 && x.IsShield != 1).Select(x => new StatsisLib.UserInfo()
                 {
                     Num = x.Id.ToString(),
                     Name = x.Name,
