@@ -71,6 +71,7 @@ function showFileList(cid, obj) {
     $.each(obj, function (i, n) {
         tab += "<tr><td>" + n.Id + "</td><td>" + n.Name + "</td><td class='td_date'>" + n.CreateTime + "</td><td class='td_op'>";
         tab += "<a href='/home/down_src?id=" + n.Id + "' title='下载源数据'><span class='glyphicon glyphicon-cloud'></span> </a>";
+        tab += "<a href='/home/down_src_trim?id=" + n.Id + "' title='下载剔除后数据'><span class='glyphicon glyphicon-screenshot'></span> </a>";
         tab += "<a href='javascript:DelFile(&#39;" + n.Id + "&#39;)'  title='删除'><span class='glyphicon glyphicon-trash'></span> </a>";
         tab += "<a href='/home/down_Anaysle?id=" + n.Id + "' title='生成报表'><span class='glyphicon glyphicon-cloud-download'></span> </a>";
         tab += "<a href='/home/email?id=" + n.Id + "' title='发送'>e </a>";

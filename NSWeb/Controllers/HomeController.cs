@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Data;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
+using StatsisLib;
 
 namespace NSWeb.Controllers
 {
@@ -32,7 +33,7 @@ namespace NSWeb.Controllers
             var timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
 
             return Content(JsonConvert.SerializeObject(infos, Formatting.Indented, timeConverter));
-           // return Json(infos, JsonRequestBehavior.AllowGet);
+            // return Json(infos, JsonRequestBehavior.AllowGet);
         }
 
         [ActionName("upload")]
@@ -125,7 +126,7 @@ namespace NSWeb.Controllers
             }
             return Json(rInfo);
         }
-        [ActionName("down_src")] 
+        [ActionName("down_src")]
         public FileStreamResult DownFile(int id)
         {
             var info = DBContext.UploadInfo.FirstOrDefault(x => x.Id == id);
@@ -137,6 +138,74 @@ namespace NSWeb.Controllers
             var fileStream = new FileStream(absoluFilePath, FileMode.Open);
             return File(fileStream, "application/octet-stream", Server.UrlEncode(info.SaveName));
         }
+
+        [ActionName("down_src_trim")]
+        public FileStreamResult DownFileTrim(int id)
+        {
+            var info = DBContext.UploadInfo.FirstOrDefault(x => x.Id == id);
+            if (info == null)
+            {
+                return new FileStreamResult(null, "error");
+            }
+            string absoluFilePath = GetPath(info.SaveName);
+            var totalInfos = StatsisLib.Common.DTToList<BaseDataInfo>(NPOIHelper.ImportExceltoDt(absoluFilePath, 0, 1));
+
+            List<BaseDataInfo> dataInfos = new List<BaseDataInfo>();
+
+            string tcName = Path.GetFileNameWithoutExtension(info.Name) + "_tc.xls";
+            var tcFile = DBContext.UploadInfo.FirstOrDefault(x => x.Name == tcName);
+            if (tcFile != null)
+            {
+                dataInfos = StatsisLib.Common.DTToList<BaseDataInfo>(NPOIHelper.ImportExceltoDt(GetPath(tcFile.SaveName)));
+                #region d
+
+
+                totalInfos = totalInfos.Where(x => !string.IsNullOrWhiteSpace(x.工号)).ToList();
+                foreach (var item in totalInfos)
+                {
+                    var fInfo = dataInfos.FirstOrDefault(x => x.工号 == item.工号);
+                    if (fInfo != null)
+                    {
+                        item.录音抽检数 -= fInfo.录音抽检数;
+                        item.中度服务瑕疵量 -= fInfo.中度服务瑕疵量;
+                        item.重大服务失误量 -= fInfo.重大服务失误量;
+                        item.总接听量 -= fInfo.总接听量;
+                        item.满意 -= fInfo.满意;
+                        item.不满意 -= fInfo.不满意;
+                        item.一般 -= fInfo.一般;
+                        item.总量 -= fInfo.总量;
+                        item.通过量 -= fInfo.通过量;
+                    }
+                }
+
+                #endregion
+            }
+
+            var cols = System.Configuration.ConfigurationManager.AppSettings["MainT"].Split(',').ToList();
+            var dt1 = StatsisLib.Common.ListToDataTable(totalInfos, cols);
+            dt1.TableName = "1";
+            var dt2 = StatsisLib.Common.ListToDataTable(dataInfos, cols);
+            dt2.TableName = "2";
+
+            string tmpFilePath = GetPath(Path.GetFileNameWithoutExtension(info.SaveName) + "_tc_r.xls");
+            if (System.IO.File.Exists(tmpFilePath))
+            {
+                System.IO.File.Delete(tmpFilePath);
+            }
+            NPOIHelper.ExportSimple(
+                new List<System.Data.DataTable>() 
+                {
+                   dt1,
+                   dt2
+                },
+                tmpFilePath);
+
+
+
+            var fileStream = new FileStream(tmpFilePath, FileMode.Open);
+            return File(fileStream, "application/octet-stream", Server.UrlEncode(info.SaveName));
+        }
+
 
         [ActionName("down_Anaysle")]
         public FileStreamResult DownAnaysleFile(int id)
@@ -210,7 +279,7 @@ namespace NSWeb.Controllers
                     sendMail.IsSendAttachments = true;
                     sendMail.Attachments = new string[] { file };
                     var s = sendMail.Send(out msg);
-                    if (s==MailLib.MailHelper.SendStatus.Success)
+                    if (s == MailLib.MailHelper.SendStatus.Success)
                     {
                         rInfo.IsSuccess = true;
                     }
@@ -230,7 +299,7 @@ namespace NSWeb.Controllers
                 rInfo.Message = ex.Message;
             }
 
-            return Json(rInfo,JsonRequestBehavior.AllowGet);
+            return Json(rInfo, JsonRequestBehavior.AllowGet);
         }
 
 

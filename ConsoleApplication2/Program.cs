@@ -16,7 +16,9 @@ namespace ConsoleApplication2
         {
 
             //AddWay();
-            DelWay();
+            //DelWay();
+            DelWay2();
+
             //var sendMail = new MailHelper();
             //sendMail.AttachmentSavePath = "C:\\";
             //sendMail.Login();
@@ -179,6 +181,9 @@ namespace ConsoleApplication2
                 @"E:\Projects\tt\dojoin\22.xlsx");
         }
 
+        /// <summary>
+        /// 采用减方法计算按天剔除数据
+        /// </summary>
         private static void DelWay()
         {
             string dir = @"E:\Projects\tt\dojoin\Files";
@@ -287,6 +292,140 @@ namespace ConsoleApplication2
                    dt3
                 },
                 @"E:\Projects\tt\dojoin\22.xls");
+        }
+
+        /// <summary>
+        /// 按人剔除
+        /// </summary>
+        private static void DelWay2()
+        {
+
+
+            //string dir = @"E:\Projects\tt\dojoin\Files";
+            //string[] files = Directory.GetFiles(dir, "*.xls", SearchOption.TopDirectoryOnly);
+            //List<BaseDataByDate> infos = new List<BaseDataByDate>();
+            //foreach (var item in files)
+            //{
+            //    infos.Add(new BaseDataByDate()
+            //    {
+            //        FileName = item,
+            //        Infos = StatsisLib.Common.DTToList<BaseDataInfo>(NPOIHelper.ImportExceltoDt(item, 0, 1)).Where(x => !string.IsNullOrWhiteSpace(x.工号)).ToList()
+            //    });
+            //}
+
+            //#region Union
+
+            var dataInfos = StatsisLib.Common.DTToList<TCInfo>(NPOIHelper.ImportExceltoDt(@"E:\Projects\tt\2月\1.xls"));
+
+            //List<BaseDataInfo> goodList = new List<BaseDataInfo>();
+            //List<BaseDataInfo> unGoodList = new List<BaseDataInfo>();
+            //foreach (var item in infos)
+            //{
+            //    var fItems = fInfos.Where(x => x.日期 == item.RegId).ToList();
+            //    foreach (var bItem in item.Infos)
+            //    {
+            //        if (fItems.FindIndex(x => x.工号 == bItem.工号) != -1)
+            //        {
+            //            unGoodList.Add(bItem);
+            //        }
+            //    }
+            //}
+
+
+            #region @sum
+            //var dataInfos = unGoodList.GroupBy(x => x.工号).Select(x => new BaseDataInfo()
+            //{
+            //    技能组 = x.FirstOrDefault().技能组,
+            //    工号 = x.Key,
+            //    姓名 = x.FirstOrDefault().姓名,
+            //    //录音抽检数 = x.Sum(y => y.录音抽检数),
+            //    //中度服务瑕疵量 = x.Sum(y => y.中度服务瑕疵量),
+            //    //重大服务失误量 = x.Sum(y => y.重大服务失误量),
+            //    有效投诉量 = x.Sum(y => y.有效投诉量),
+            //    总接听量 = x.Sum(y => y.总接听量),
+            //    满意 = x.Sum(y => y.满意),
+            //    不满意 = x.Sum(y => y.不满意),
+            //    一般 = x.Sum(y => y.一般),
+            //    总量 = x.Sum(y => y.总量),
+            //    //通过量 = x.Sum(y => y.通过量)
+            //}).ToList();
+            //#endregion
+
+            #endregion
+
+            #region d
+
+            var totalInfos = StatsisLib.Common.DTToList<BaseDataInfo>(NPOIHelper.ImportExceltoDt(@"E:\Projects\tt\2月\total.xls", 0, 1));
+            totalInfos = totalInfos.Where(x => !string.IsNullOrWhiteSpace(x.工号)).ToList();
+            foreach (var item in totalInfos)
+            {
+                var fInfo = dataInfos.FirstOrDefault(x => x.工号 == item.工号);
+                if (fInfo != null)
+                {
+                    //item.录音抽检数 -= fInfo.录音抽检数;
+                    // item.中度服务瑕疵量 -= fInfo.中度服务瑕疵量;
+                    // item.重大服务失误量 -= fInfo.重大服务失误量;
+                    item.总接听量 -= fInfo.总接听量;
+                    item.满意 -= fInfo.满意;
+                    item.不满意 -= fInfo.不满意;
+                    item.一般 -= fInfo.一般;
+                    //item.总量 -= fInfo.总量;
+                    //item.通过量 -= fInfo.通过量;
+                }
+            }
+
+            #endregion
+
+            #region MYD
+
+            string mydFile = @"E:\Projects\tt\2月\myd.xls";
+            if (File.Exists(mydFile))
+            {
+                var mInfos = StatsisLib.Common.DTToList<MinDataInfo>(NPOIHelper.ImportExceltoDt(mydFile, DateTime.Now.AddDays(-15).Month + "月", 0));
+
+                foreach (var item in mInfos.Where(x => !string.IsNullOrWhiteSpace(x.需修改员工工号)).ToList())
+                {
+                    var dItem = totalInfos.FirstOrDefault(x => x.工号 == item.需修改员工工号);
+                    if (dItem != null)
+                    {
+                        dItem.不满意 += item.不满意;
+                        dItem.满意 += item.满意;
+                        dItem.一般 += item.一般;
+                        dItem.总量 += item.Change;
+                    }
+                }
+            }
+
+            #endregion
+
+            var cols = System.Configuration.ConfigurationManager.AppSettings["MainT"].Split(',').ToList();
+            var dt1 = StatsisLib.Common.ListToDataTable(totalInfos, cols);
+            dt1.TableName = "1";
+            var dt2 = StatsisLib.Common.ListToDataTable(dataInfos, cols);
+            dt2.TableName = "2";
+
+            NPOIHelper.ExportSimple(
+                new List<System.Data.DataTable>() 
+                {
+                   dt1,
+                   dt2
+                },
+                @"E:\Projects\tt\2月\22.xls");
+        }
+
+        private static void UpdateUser()
+        {
+            var dataInfos = StatsisLib.Common.DTToList<DateInfo>(NPOIHelper.ImportExceltoDt(@"E:\Projects\tt\2月\date.xls"));
+            DataService.QHXEntities DBContext = new DataService.QHXEntities();
+            foreach (var uItem in dataInfos)
+            {
+                var s = DBContext.UserInfo.FirstOrDefault(x => x.Id.ToString() == uItem.工号);
+                if (s != null)
+                {
+                    s.InTime = uItem.上岗时间;
+                }
+            }
+            DBContext.SaveChanges();
         }
 
         private static void SendMail()

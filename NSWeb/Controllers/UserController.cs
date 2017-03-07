@@ -263,7 +263,7 @@ namespace NSWeb.Controllers
                             s.IsShield = 0;
                             s.Remark = uItem.特殊情况;
                             s.OrderIndex = index;
-
+                            //s.InTime = uItem.入组时间;
                             index++;
                         }
                         groupIndex++;

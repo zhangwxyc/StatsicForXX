@@ -67,6 +67,7 @@
     <Compile Include="BaseDataInfo.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="DataProcess.cs" />
+    <Compile Include="DateInfo.cs" />
     <Compile Include="DeepCopy.cs" />
     <Compile Include="FilterByDateInfo.cs" />
     <Compile Include="MappInfo.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializeHelper.cs" />
     <Compile Include="StatsicDataInfo.cs" />
+    <Compile Include="TCInfo.cs" />
     <Compile Include="TM\IMaker.cs" />
     <Compile Include="TM\LeaderMaker.cs" />
     <Compile Include="UserInfo.cs" />

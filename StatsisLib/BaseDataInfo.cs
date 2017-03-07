@@ -127,5 +127,7 @@ namespace StatsisLib
                 return dt.AddMonths(1) > startMonth;
             }
         }
+
+        public int UCount { get; set; }
     }
 }
