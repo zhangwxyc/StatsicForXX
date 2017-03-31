@@ -391,11 +391,15 @@ namespace ConsoleApplication2
                         dItem.不满意 += item.不满意;
                         dItem.满意 += item.满意;
                         dItem.一般 += item.一般;
-                        dItem.总量 += item.Change;
+                        // dItem.总量 += item.Change;
+                        
                     }
                 }
             }
-
+            foreach (var dItem in totalInfos)
+            {
+                dItem.总量 = dItem.不满意 + dItem.满意 + dItem.一般;
+            }
             #endregion
 
             var cols = System.Configuration.ConfigurationManager.AppSettings["MainT"].Split(',').ToList();
@@ -422,7 +426,12 @@ namespace ConsoleApplication2
                 var s = DBContext.UserInfo.FirstOrDefault(x => x.Id.ToString() == uItem.工号);
                 if (s != null)
                 {
+                    Console.WriteLine("{0},{1}=>{2}", uItem.姓名, s.InTime, uItem.上岗时间);
                     s.InTime = uItem.上岗时间;
+                }
+                else
+                {
+                    Console.WriteLine("{0},xx", uItem.姓名);
                 }
             }
             DBContext.SaveChanges();

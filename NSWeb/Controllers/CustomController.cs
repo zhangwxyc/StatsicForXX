@@ -133,7 +133,8 @@ namespace NSWeb.Controllers
                     }
                 }
 
-                DataProcess.ComputeV2(infos);
+               // DataProcess.ComputeV2(infos);
+                DataProcess.Compute(infos);
                 infos = infos.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
 
                 infos.Serialize(dataPath);

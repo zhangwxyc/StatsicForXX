@@ -9,5 +9,7 @@ namespace StatsisLib
     {
         public string 工号 { get; set; }
         public string 上岗时间 { get; set; }
+
+        public string 姓名 { get; set; }
     }
 }

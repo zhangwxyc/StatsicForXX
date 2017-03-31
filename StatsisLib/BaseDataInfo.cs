@@ -129,5 +129,21 @@ namespace StatsisLib
         }
 
         public int UCount { get; set; }
+
+        #region 新增基础
+        public int 成功次数 { get; set; }
+        public int C满意 { get; set; }
+        public int C一般 { get; set; }
+        public int C不满意 { get; set; }
+        #endregion
+
+        #region 新增计算
+        public int 合计接听量 { get; set; }
+        public int T满意 { get; set; }
+        public int T一般 { get; set; }
+        public int T不满意 { get; set; }
+
+        public int T总量 { get; set; }
+        #endregion
     }
 }
