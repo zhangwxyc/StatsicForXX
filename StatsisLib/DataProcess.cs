@@ -83,40 +83,40 @@ namespace StatsisLib
 
 
 
-        public static List<BaseDataInfo> Process(List<BaseDataInfo> list, NestDirectory nsDir)
-        {
-            var groupList = list.GroupBy(x => x.Tag).ToDictionary(x => x.Key);
+        //public static List<BaseDataInfo> Process(List<BaseDataInfo> list, NestDirectory nsDir)
+        //{
+        //    var groupList = list.GroupBy(x => x.Tag).ToDictionary(x => x.Key);
 
-            var sumLines = SumLine(list);
+        //    var sumLines = SumLine(list);
 
-            var finallyList = new List<BaseDataInfo>();
+        //    var finallyList = new List<BaseDataInfo>();
 
-            foreach (var item in groupList)
-            {
-                finallyList.AddRange(item.Value);
-                var subLine = sumLines.FirstOrDefault(x => x.Tag == item.Key);
-                if (subLine != null)
-                {
-                    finallyList.Add(subLine);
-                }
-            }
+        //    foreach (var item in groupList)
+        //    {
+        //        finallyList.AddRange(item.Value);
+        //        var subLine = sumLines.FirstOrDefault(x => x.Tag == item.Key);
+        //        if (subLine != null)
+        //        {
+        //            finallyList.Add(subLine);
+        //        }
+        //    }
 
-            foreach (var item in nsDir.Children)
-            {
-                var subLine = SumLine(list, item);
-                finallyList.Add(subLine);
-            }
+        //    foreach (var item in nsDir.Children)
+        //    {
+        //        var subLine = SumLine(list, item);
+        //        finallyList.Add(subLine);
+        //    }
 
-            var totalLine = SumLine(list, nsDir, true);
-            finallyList.Add(totalLine);
+        //    var totalLine = SumLine(list, nsDir, true);
+        //    finallyList.Add(totalLine);
 
-            Compute(finallyList);
+        //    Compute(finallyList);
 
-            OutputMainT(finallyList);
+        //    OutputMainT(finallyList);
 
-            return finallyList;
+        //    return finallyList;
 
-        }
+        //}
 
         private static void OutputMainT(List<BaseDataInfo> finallyList)
         {
@@ -205,9 +205,21 @@ namespace StatsisLib
             var dt = Common.ListToDataTable<BaseDataInfo>(list, Common.GetConfig("MainT").Split(',').ToList(), false);
             return dt;
         }
+        public static DataTable T7(List<BaseDataInfo> list)
+        {
+            var dt = Common.ListToDataTable<BaseDataInfo>(list, Common.GetConfig("MainT").Split(',').ToList(), false);
+            return dt;
+        }
 
         public static List<BaseDataInfo> SumLine(List<BaseDataInfo> list)
         {
+           
+            var subList = new List<BaseDataInfo>();
+            foreach (var item in list)
+            {
+                
+            }
+
             var linfo = list.GroupBy(x => x.技能组).Select(x => new BaseDataInfo()
             {
                 技能组 = x.Key,
@@ -232,35 +244,35 @@ namespace StatsisLib
             return linfo;
         }
 
-        public static BaseDataInfo SumLine(List<BaseDataInfo> list, NestDirectory dir, bool isNest = false)
-        {
-            string groups = dir.GetChildrenNames(isNest);
-            var subList = list.Where(x => FilterGroup(x, groups)).ToList();
-            subList.ForEach(x => x.Tag = dir.Name);
+        //public static BaseDataInfo SumLine(List<BaseDataInfo> list, NestDirectory dir, bool isNest = false)
+        //{
+        //    string groups = dir.GetChildrenNames(isNest);
+        //    var subList = list.Where(x => FilterGroup(x, groups)).ToList();
+        //    subList.ForEach(x => x.Tag = dir.Name);
 
-            var linfo = subList.GroupBy(x => x.Tag).Select(x => new BaseDataInfo()
-            {
-                技能组 = dir.Name,
+        //    var linfo = subList.GroupBy(x => x.Tag).Select(x => new BaseDataInfo()
+        //    {
+        //        技能组 = dir.Name,
 
-                录音抽检数 = x.Sum(y => y.录音抽检数),
-                平均得分 = x.Average(y => y.平均得分),
-                中度服务瑕疵量 = x.Sum(y => y.中度服务瑕疵量),
-                重大服务失误量 = x.Sum(y => y.重大服务失误量),
-                有效投诉量 = x.Sum(y => y.有效投诉量),
-                XX = x.Sum(y => y.XX),
-                总接听量 = x.Sum(y => y.总接听量),
-                满意 = x.Sum(y => y.满意),
-                不满意 = x.Sum(y => y.不满意),
-                一般 = x.Sum(y => y.一般),
-                总量 = x.Sum(y => y.总量),
-                通过量 = x.Sum(y => y.通过量)
-                //gg = 0,
-                // 通过率 = GetRate(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数)),
-                // 满意度系数 = GetFactor(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数))
-            }).FirstOrDefault();
+        //        录音抽检数 = x.Sum(y => y.录音抽检数),
+        //        平均得分 = x.Average(y => y.平均得分),
+        //        中度服务瑕疵量 = x.Sum(y => y.中度服务瑕疵量),
+        //        重大服务失误量 = x.Sum(y => y.重大服务失误量),
+        //        有效投诉量 = x.Sum(y => y.有效投诉量),
+        //        XX = x.Sum(y => y.XX),
+        //        总接听量 = x.Sum(y => y.总接听量),
+        //        满意 = x.Sum(y => y.满意),
+        //        不满意 = x.Sum(y => y.不满意),
+        //        一般 = x.Sum(y => y.一般),
+        //        总量 = x.Sum(y => y.总量),
+        //        通过量 = x.Sum(y => y.通过量)
+        //        //gg = 0,
+        //        // 通过率 = GetRate(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数)),
+        //        // 满意度系数 = GetFactor(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数))
+        //    }).FirstOrDefault();
 
-            return linfo;
-        }
+        //    return linfo;
+        //}
         public static BaseDataInfo CreateStatsicLine(List<BaseDataInfo> list, string lineName, List<string> groupNames)
         {
             var subList = list.Where(x => groupNames.Contains(x.技能组)).ToList();
@@ -292,24 +304,24 @@ namespace StatsisLib
             return linfo;
         }
 
-        public static void ComputeV2(List<BaseDataInfo> list)
-        {
-            foreach (var item in list)
-            {
-                item.通过率 = GetPassRate(item);
-                item.满意度系数 = GetSII(item);
-                //item.客户满意度=Get
-                item.客户评价率 = GetEvalRate(item);
-                item.客户满意度 = GetSI(item);
-                item.净满意度 = GetJSI(item);
-                item.通过率系数 = GetPII(item);
-            }
-        }
+        //public static void ComputeV2(List<BaseDataInfo> list)
+        //{
+        //    foreach (var item in list)
+        //    {
+        //        item.通过率 = GetPassRate(item);
+        //        item.满意度系数 = GetSII(item);
+        //        //item.客户满意度=Get
+        //        item.客户评价率 = GetEvalRate(item);
+        //        item.客户满意度 = GetSI(item);
+        //        item.净满意度 = GetJSI(item);
+        //        item.通过率系数 = GetPII(item);
+        //    }
+        //}
         public static void Compute(List<BaseDataInfo> list)
         {
             foreach (var item in list)
             { 
-                item.合计接听量 = item.总接听量 + item.成功次数;
+                item.T合计接听量 = item.总接听量 + item.C总成功量;
                 item.T满意 = item.C满意 + item.满意;
                 item.T不满意= item.C不满意 + item.不满意;
                 item.T一般=item.C一般 + item.一般;
@@ -359,7 +371,7 @@ namespace StatsisLib
         }
         private static string GetEvalRate(BaseDataInfo x)
         {
-            return GetRate(x.T总量, x.合计接听量);
+            return GetRate(x.T总量, x.T合计接听量);
         }
 
         private static string GetJSI(BaseDataInfo x)

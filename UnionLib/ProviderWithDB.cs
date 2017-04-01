@@ -36,7 +36,8 @@ namespace UnionLib
                     OrderIndex = x.OrderIndex ?? 0
                     ,
                     Remark = x.Remark,
-                    IsShield = x.IsShield ?? 0
+                    IsShield = x.IsShield ?? 0,
+                    IsTrimFromGroup=x.IsTrimFromGroup??0
                 }).ToList();
         }
 

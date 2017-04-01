@@ -218,14 +218,46 @@ namespace NSWeb.Controllers
             string absoluFilePath = GetPath(info.SaveName);
 
             UnionLib.AnaysleService service = new UnionLib.AnaysleService();
-            string file = service.Create(absoluFilePath);
+            string file = service.Create(absoluFilePath,GetAssistParams(id));
 
             var fileStream = new FileStream(file, FileMode.Open);
 
             return File(fileStream, "application/octet-stream", Server.UrlEncode(file));
         }
 
+        private Dictionary<string, object> GetAssistParams(int id)
+        {
+            Dictionary<string, object> list = new Dictionary<string, object>();
+            var currentInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Id == id);
+            if (currentInfo != null)
+            {
+               // list.Add("CurrentInfo", currentInfo);
+                string trimFileName = Path.GetFileNameWithoutExtension(currentInfo.Name) + "_tc.xls";
+                var trimInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == trimFileName);
 
+                if (trimInfo!=null)
+                {
+                    list.Add("tc", GetPath(trimInfo.SaveName));
+                }
+
+                string mydFileName = Path.GetFileNameWithoutExtension(currentInfo.Name) + "_myd.xls";
+                var mydInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == mydFileName);
+
+                if (mydInfo != null)
+                {
+                    list.Add("myd", GetPath(mydInfo.SaveName));
+                }
+                string tslFileName = Path.GetFileNameWithoutExtension(currentInfo.Name) + "_tsl.xls";
+                var tslInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == tslFileName);
+
+                if (tslInfo != null)
+                {
+                    list.Add("tsl", GetPath(tslInfo.SaveName));
+                }
+            }
+
+            return list;
+        }
 
         [ActionName("d")]
         public JsonResult OpGroup(int id)
@@ -272,7 +304,7 @@ namespace NSWeb.Controllers
                     string absoluFilePath = GetPath(currentInfo.SaveName);
 
                     UnionLib.AnaysleService service = new UnionLib.AnaysleService();
-                    string file = service.Create(absoluFilePath);
+                    string file = service.Create(absoluFilePath,GetAssistParams(id));
 
                     var msg = "";
                     var sendMail = new MailLib.MailHelper("smtp.163.com", 25, "zhangwxyc@163.com", "qwerty123", System.Configuration.ConfigurationManager.AppSettings["toUsers"].Split(','), "how are you", "body is xxxx", false);

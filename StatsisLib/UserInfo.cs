@@ -19,5 +19,7 @@ namespace StatsisLib
         public string Remark { get; set; }
 
         public int IsShield { get; set; }
+
+        public int IsTrimFromGroup { get; set; }
     }
 }

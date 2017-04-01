@@ -82,6 +82,7 @@
     <Compile Include="TCInfo.cs" />
     <Compile Include="TM\IMaker.cs" />
     <Compile Include="TM\LeaderMaker.cs" />
+    <Compile Include="TSLInfo.cs" />
     <Compile Include="UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>

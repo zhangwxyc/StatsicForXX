@@ -4,6 +4,8 @@
     //    $("")
     //});
     $("#tb_IsSheild").bootstrapSwitch();
+    $("#tb_IsTrimFromGroup").bootstrapSwitch();
+
 });
 function filterGroups() {
     var filterData = $("#tb_filter").val();
@@ -58,10 +60,10 @@ function ShowTable(cid, obj) {
         return;
     }
     var tab = "<table class='table table-bordered'  id='UserList'>";
-    tab += "<tr><th>Num</th><th>姓名</th><th>Date</th><th>join</th><th>...</th></tr>";
+    tab += "<tr><th>Num</th><th>姓名</th><th>Date</th><th>是否参与核算</th><th>参与组统计</th><th>...</th></tr>";
     var index = 0;
     $.each(obj, function (i, n) {
-        tab += "<tr title='" + n.Remark + "'><td>" + n.Id + "</td><td>" + n.Name + "</td><td>" + n.InTime + "</td><td>" + (n.IsShield == 0 ? '是' : '否') + "</td><td class='user_td_op'>";
+        tab += "<tr title='" + n.Remark + "'><td>" + n.Id + "</td><td>" + n.Name + "</td><td>" + n.InTime + "</td><td>" + (n.IsShield == 0 ? '是' : '否') + "</td><td>" + (n.IsTrimFromGroup == 0 ? '是' : '否') + "</td><td class='user_td_op'>";
 
         tab += "<a href='javascript:UserDig(&#39;" + n.Id + "&#39;)'><span class='glyphicon glyphicon-edit'></span> </a>";
         tab += "<a href='javascript:DelUser(&#39;" + n.Id + "&#39;)'><span class='glyphicon glyphicon-trash'></span> </a>";
@@ -111,6 +113,9 @@ function UserDig(obj) {
                 //$.each(obj, function (i, n) {
                 //    $(this).removeAttr("selected");
                 //});
+
+                $('#tb_IsTrimFromGroup').bootstrapSwitch('state', data.IsTrimFromGroup == 0);
+
                 $("#s_groupList option[selected='selected']").removeAttr("selected");
                 $("#s_groupList option[value='" + data.GroupName + "']").attr("selected", true);
                 $("#div_OpUser").modal();
@@ -168,6 +173,7 @@ function SaveUser() {
     datas.InTime = $("#tb_Time").val();
     datas.Remark = $("#tb_Remark").val();
     datas.IsShield = $("#tb_IsSheild").bootstrapSwitch('state') == true ? 0 : 1;
+    datas.IsTrimFromGroup = $("#tb_IsTrimFromGroup").bootstrapSwitch('state') == true ? 0 : 1;
     var group = $("#s_groupList").val();
     if (datas.Id == '' || datas.Name == '' || datas.group == '') {
         alert("信息填写不完整");

@@ -22,5 +22,6 @@ namespace DataService
         public Nullable<int> OrderIndex { get; set; }
         public string Remark { get; set; }
         public Nullable<int> IsShield { get; set; }
+        public Nullable<int> IsTrimFromGroup { get; set; }
     }
 }

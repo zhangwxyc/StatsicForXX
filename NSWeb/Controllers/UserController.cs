@@ -101,6 +101,7 @@ namespace NSWeb.Controllers
                     uInfo.Name = userInfo.Name;
                     uInfo.InTime = userInfo.InTime;
                     uInfo.IsShield = userInfo.IsShield;
+                    uInfo.IsTrimFromGroup = userInfo.IsTrimFromGroup;
 
                     if (uInfo.GroupName != userInfo.GroupName)
                     {
@@ -209,7 +210,7 @@ namespace NSWeb.Controllers
 
                     var dt = ds.Tables[0];
                     var urInfos = StatsisLib.Common.DTToList<StatsisLib.Models.URInfo>(dt);
-
+                    ///去掉组长本人
                     var gInfos = urInfos.Where(x => !x.组别.Contains(x.姓名)).GroupBy(x => x.组别).ToDictionary(x => x.Key, x => x.ToList());
                     int groupIndex = 1;
                     foreach (var item in gInfos)
@@ -217,20 +218,25 @@ namespace NSWeb.Controllers
                         var gInfo = DBContext.GroupInfo.FirstOrDefault(x => x.Name == item.Key);
                         if (gInfo == null)
                         {
+
                             str.AppendFormat("缺少组：{0}<br/>", item.Key);
                             gInfo = new GroupInfo()
                             {
                                 Name = item.Key,
                                 IsDel = 0,
-                                OrderIndex = groupIndex
+                                OrderIndex = groupIndex,
+                                 IsLeaf=1
                             };
+                            DBContext.GroupInfo.Add(gInfo);
                         }
                         else
                         {
                             gInfo.OrderIndex = groupIndex;
                             gInfo.IsDel = 0;
+                          
                         }
-
+                        groupIndex++;
+                        
                         #region u
                         int index = 1;
                         foreach (var uItem in item.Value)
@@ -261,17 +267,18 @@ namespace NSWeb.Controllers
                             }
                             s.IsDel = 0;
                             s.IsShield = 0;
+                            s.IsTrimFromGroup = 0;
                             s.Remark = uItem.特殊情况;
                             s.OrderIndex = index;
                             //s.InTime = uItem.入组时间;
                             index++;
                         }
-                        groupIndex++;
 
                         #endregion
+                       
                     }
 
-
+                    
 
                     foreach (var dItem in DBContext.UserInfo.Where(x=>x.IsDel==0).ToList())
                     {

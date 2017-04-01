@@ -16,25 +16,32 @@ namespace UnionLib
             DataProvider = new ProviderWithDB();
         }
         public List<BaseDataInfo> SrcInfos { get; set; }
-        public string Create(string absoluFilePath, string outputPath = "")
+        public string Create(string absoluFilePath, Dictionary<string, object> dictParams, string outputPath = "")
         {
             var dt = NPOIHelper.ImportExceltoDt(absoluFilePath, 0, 1);
             SrcInfos = StatsisLib.Common.DTToList<BaseDataInfo>(dt);
+            if (SrcInfos.Count == 0)
+            {
+                dt = NPOIHelper.ImportExceltoDt(absoluFilePath, 0, 0);
+                SrcInfos = StatsisLib.Common.DTToList<BaseDataInfo>(dt);
+            }
 
             //SrcInfos = FilterUsers(SrcInfos);
             var DestInfos = WatshData(SrcInfos);//洗
+            DestInfos = AjustData(dictParams, DestInfos);//校正（剔除+myd修改）
             // DataProcess.Compute(DestInfos);//基础计算
-            
+
             List<DataTable> ds = new List<DataTable>()
             {
                 CreateMainTable(DestInfos),
-                DataProcess.T1(DestInfos.OrderBy(x => GetIndex(x.技能组)).ToList()),
+                DataProcess.T1(WatshUnJoinGroupData(DestInfos).OrderBy(x => GetIndex(x.技能组)).ToList()),
                 DataProcess.T2(DestInfos),
                 DataProcess.T2_5(DestInfos),
 
                 DataProcess.T4(DestInfos),
                 DataProcess.T3(DestInfos),
-                DataProcess.T5(DestInfos)
+                DataProcess.T5(DestInfos),
+                DataProcess.T6(DestInfos)
             };
 
             RenameTableName(ds);
@@ -46,11 +53,96 @@ namespace UnionLib
             return outputPath;
         }
 
-        public List<BaseDataInfo> GetSumLineTable(string path)
+        private List<BaseDataInfo> AjustData(Dictionary<string, object> dictParams, List<BaseDataInfo> DestInfos)
+        {
+            if (dictParams.ContainsKey("tc") && dictParams["tc"] != null)
+            {
+                string path = dictParams["tc"].ToString();
+                if (File.Exists(path))
+                {
+                    #region d
+
+                    var dataInfos = StatsisLib.Common.DTToList<TCInfo>(NPOIHelper.ImportExceltoDt(path));
+                    foreach (var item in DestInfos)
+                    {
+                        var fInfo = dataInfos.FirstOrDefault(x => x.工号 == item.工号);
+                        if (fInfo != null)
+                        {
+                            item.总接听量 -= fInfo.总接听量;
+                            item.满意 -= fInfo.满意;
+                            item.不满意 -= fInfo.不满意;
+                            item.一般 -= fInfo.一般;
+                        }
+                    }
+
+                    #endregion
+                }
+            }
+            if (dictParams.ContainsKey("myd") && dictParams["myd"] != null)
+            {
+                string path = dictParams["myd"].ToString();
+                if (File.Exists(path))
+                {
+                    #region MYD
+
+                    var mInfos = StatsisLib.Common.DTToList<MinDataInfo>(NPOIHelper.ImportExceltoDt(path, DateTime.Now.AddDays(-15).Month + "月", 0));
+
+                    foreach (var item in mInfos.Where(x => !string.IsNullOrWhiteSpace(x.需修改员工工号)).ToList())
+                    {
+                        var dItem = DestInfos.FirstOrDefault(x => x.工号 == item.需修改员工工号);
+                        if (dItem != null)
+                        {
+                            dItem.不满意 += item.不满意;
+                            dItem.满意 += item.满意;
+                            dItem.一般 += item.一般;
+                            // dItem.总量 += item.Change;
+
+                        }
+                    }
+
+                    //foreach (var dItem in DestInfos)
+                    //{
+                    //    dItem.总量 = dItem.不满意 + dItem.满意 + dItem.一般;
+                    //}
+                    #endregion
+                }
+            }
+            if (dictParams.ContainsKey("tsl")&&dictParams["tsl"] != null)
+            {
+                string path = dictParams["tsl"].ToString();
+                if (File.Exists(path))
+                {
+                    #region tsl
+
+                    var mInfos = StatsisLib.Common.DTToList<TSLInfo>(NPOIHelper.ImportExceltoDt(path));
+
+                    foreach (var item in mInfos.Where(x => !string.IsNullOrWhiteSpace(x.工号)).ToList())
+                    {
+                        var dItem = DestInfos.FirstOrDefault(x => x.工号 == item.工号);
+                        if (dItem != null)
+                        {
+                            dItem.有效投诉量= item.有效投诉量;
+                        }
+                    }
+                    #endregion
+                }
+            }
+            return DestInfos;
+        }
+
+
+
+        /// <summary>
+        /// 提供组信息自定义
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public List<BaseDataInfo> GetSumLineTable(string path, Dictionary<string, object> dict)
         {
             var dt = NPOIHelper.ImportExceltoDt(path, 0, 1);
             SrcInfos = StatsisLib.Common.DTToList<BaseDataInfo>(dt);
-            var DestInfos = WatshData(SrcInfos);//洗
+            var DestInfos = WatshUnJoinGroupData(SrcInfos);//洗
+            DestInfos = AjustData(dict, DestInfos);
             var sumLines = DataProcess.SumLine(DestInfos);
             DataProcess.Compute(sumLines);
             var resultData = sumLines.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
@@ -77,7 +169,35 @@ namespace UnionLib
             var infos = new List<BaseDataInfo>();
             foreach (var item in dataInfos)
             {
-                if (item.总接听量==0||item.录音抽检数==0)
+                if (item.总接听量 == 0 || item.录音抽检数 == 0)
+                {
+                    continue;
+                }
+                string num = item.工号;
+                if (!string.IsNullOrWhiteSpace(num))
+                {
+                    var uInfo = userInfos.FirstOrDefault(x => x.Num.Equals(num));
+                    if (uInfo != null)
+                    {
+                        item.技能组 = uInfo.GroupName;
+                        item.新人上岗时间 = uInfo.InTime;
+                        item.OrderIndex = uInfo.OrderIndex;
+                        item.IsShield = uInfo.IsShield;
+                        infos.Add(item);
+                    }
+                }
+            }
+            return infos;
+        }
+
+        public List<BaseDataInfo> WatshUnJoinGroupData(List<BaseDataInfo> dataInfos)
+        {
+            List<UserInfo> userInfos = DataProvider.GetUserInfos(null);
+            userInfos = userInfos.Where(x => x.IsTrimFromGroup == 0).ToList();
+            var infos = new List<BaseDataInfo>();
+            foreach (var item in dataInfos)
+            {
+                if (item.总接听量 == 0 || item.录音抽检数 == 0)
                 {
                     continue;
                 }

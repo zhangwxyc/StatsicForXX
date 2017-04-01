@@ -40,7 +40,7 @@ namespace NSWeb.Controllers
                 }
                 string absoluFilePath = GetPath(info.SaveName);
                 UnionLib.AnaysleService service = new UnionLib.AnaysleService();
-                infos = service.GetSumLineTable(absoluFilePath);
+                infos = service.GetSumLineTable(absoluFilePath, GetAssistParams(id));
                 infos.Serialize(dataPath);
             }
             else
@@ -49,6 +49,32 @@ namespace NSWeb.Controllers
             }
             infos = infos.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
             return Json(infos);
+        }
+        private Dictionary<string, object> GetAssistParams(int id)
+        {
+            Dictionary<string, object> list = new Dictionary<string, object>();
+            var currentInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Id == id);
+            if (currentInfo != null)
+            {
+                // list.Add("CurrentInfo", currentInfo);
+                string trimFileName = Path.GetFileNameWithoutExtension(currentInfo.Name) + "_tc.xls";
+                var trimInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == trimFileName);
+
+                if (trimInfo != null)
+                {
+                    list.Add("tc", GetPath(trimInfo.SaveName));
+                }
+
+                string mydFileName = Path.GetFileNameWithoutExtension(currentInfo.Name) + "_myd.xls";
+                var mydInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == mydFileName);
+
+                if (mydInfo != null)
+                {
+                    list.Add("myd", GetPath(mydInfo.SaveName));
+                }
+            }
+
+            return list;
         }
         private string GetPath(string saveName)
         {

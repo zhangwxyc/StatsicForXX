@@ -73,6 +73,7 @@
           <Property Name="OrderIndex" Type="int" />
           <Property Name="Remark" Type="nvarchar" MaxLength="1000" />
           <Property Name="IsShield" Type="int" />
+          <Property Name="IsTrimFromGroup" Type="int" />
         </EntityType>
         <EntityContainer Name="DBServicesStoreContainer">
           <EntitySet Name="GroupInfo" EntityType="Self.GroupInfo" Schema="dbo" store:Type="Tables" />
@@ -134,6 +135,7 @@
           <Property Name="OrderIndex" Type="Int32" />
           <Property Name="Remark" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="IsShield" Type="Int32" />
+          <Property Name="IsTrimFromGroup" Type="Int32" />
         </EntityType>
         <EntityType Name="StatsicInfo">
           <Key>
@@ -195,6 +197,7 @@
           <EntitySetMapping Name="UserInfo">
             <EntityTypeMapping TypeName="DBServices.UserInfo">
               <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="IsTrimFromGroup" ColumnName="IsTrimFromGroup" />
                 <ScalarProperty Name="IsShield" ColumnName="IsShield" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
