@@ -58,7 +58,7 @@ namespace NSWeb.Controllers
             {
                 // list.Add("CurrentInfo", currentInfo);
                 string trimFileName = Path.GetFileNameWithoutExtension(currentInfo.Name) + "_tc.xls";
-                var trimInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == trimFileName);
+                var trimInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == trimFileName && x.IsDel.Value == 0);
 
                 if (trimInfo != null)
                 {
@@ -66,11 +66,18 @@ namespace NSWeb.Controllers
                 }
 
                 string mydFileName = Path.GetFileNameWithoutExtension(currentInfo.Name) + "_myd.xls";
-                var mydInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == mydFileName);
+                var mydInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == mydFileName && x.IsDel.Value == 0);
 
                 if (mydInfo != null)
                 {
                     list.Add("myd", GetPath(mydInfo.SaveName));
+                }
+                string tslFileName = Path.GetFileNameWithoutExtension(currentInfo.Name) + "_tsl.xls";
+                var tslInfo = DBContext.UploadInfo.FirstOrDefault(x => x.Name == tslFileName && x.IsDel.Value == 0);
+
+                if (tslInfo != null)
+                {
+                    list.Add("tsl", GetPath(tslInfo.SaveName));
                 }
             }
 
