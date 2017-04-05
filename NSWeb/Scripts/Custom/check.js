@@ -1,5 +1,5 @@
 ﻿$(function () {
-    initFileInput("file_up_2", "/user/upload");
+    initFileInput("file_up_2", "/user/upload2");
    // alert("CC");
     $("#file_up_2").on("fileuploaded", function (event, data, previewId, index) {
         if (data == undefined) {
