@@ -33,15 +33,15 @@ namespace UnionLib
 
             List<DataTable> ds = new List<DataTable>()
             {
-                CreateMainTable(DestInfos),
-                DataProcess.T1(WatshUnJoinGroupData(DestInfos).OrderBy(x => GetIndex(x.技能组)).ToList()),
-                DataProcess.T2(DestInfos),
-                DataProcess.T2_5(DestInfos),
+                CreateMainTable(DestInfos.DeepClone()),
+                DataProcess.T1(WatshUnJoinGroupData(DestInfos.DeepClone()).OrderBy(x => GetIndex(x.技能组)).ToList()),
+                DataProcess.T2(DestInfos.DeepClone()),
+                DataProcess.T2_5(DestInfos.DeepClone()),
 
-                DataProcess.T4(DestInfos),
-                DataProcess.T3(DestInfos),
-                DataProcess.T5(DestInfos),
-                DataProcess.T6(DestInfos)
+                DataProcess.T4(DestInfos.DeepClone()),
+                DataProcess.T3(DestInfos.DeepClone()),
+                DataProcess.T5(DestInfos.DeepClone()),
+                DataProcess.T6(DestInfos.DeepClone())
             };
 
             RenameTableName(ds);
@@ -183,6 +183,7 @@ namespace UnionLib
                         item.新人上岗时间 = uInfo.InTime;
                         item.OrderIndex = uInfo.OrderIndex;
                         item.IsShield = uInfo.IsShield;
+                        item.姓名 = uInfo.Name;
                         infos.Add(item);
                     }
                 }
