@@ -143,6 +143,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\QAController.cs" />
     <Compile Include="Controllers\StatsicController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -170,11 +171,13 @@
     <Content Include="Scripts\Common\bootstrap-switch.js" />
     <Content Include="Scripts\Common\fileinput.js" />
     <Content Include="Scripts\Custom\check.js" />
+    <Content Include="Scripts\Custom\index_qa.js" />
     <Content Include="Scripts\Custom\index.js" />
     <Content Include="Scripts\Custom\Statsic.js" />
     <Content Include="Scripts\Custom\custom.js" />
     <Content Include="Scripts\Custom\User.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Scripts\Custom\Main.cshtml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\Common\zh.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -209,6 +212,7 @@
     <Content Include="Views\Custom\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Shared\_Layout_NoLogin.cshtml" />
+    <Content Include="Views\QA\Main.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Create\" />

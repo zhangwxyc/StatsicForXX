@@ -8,7 +8,7 @@ using System.Text;
 
 namespace UnionLib
 {
-    public class AnaysleService
+    public partial class AnaysleService
     {
         public IProviderBase DataProvider { get; set; }
         public AnaysleService()
