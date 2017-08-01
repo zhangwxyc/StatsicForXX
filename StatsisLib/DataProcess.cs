@@ -129,12 +129,12 @@ namespace StatsisLib
             Compute(sumLines);
             //var resultData = sumLines.OrderByDescending(x => x.平均得分).ThenByDescending(x => x.通过率).ToList();
             var resultData = sumLines.ToList();
-           // var resultData = sumLines.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
+            // var resultData = sumLines.OrderByDescending(x => x.通过率).ThenByDescending(x => x.净满意度).ToList();
 
             var dt = Common.ListToDataTable<BaseDataInfo>(resultData, Common.GetConfig("T1").Split(',').ToList(), false);
             return dt;
         }
-        
+
         /// <summary>
         /// 针对现成的数据直接输出
         /// </summary>
@@ -146,7 +146,7 @@ namespace StatsisLib
             var dt = Common.ListToDataTable<BaseDataInfo>(resultData, Common.GetConfig("T1").Split(',').ToList(), false);
             return dt;
         }
-        
+
         public static DataTable T2(List<BaseDataInfo> list)
         {
             string groups = Common.GetConfig("VIP");
@@ -213,11 +213,11 @@ namespace StatsisLib
 
         public static List<BaseDataInfo> SumLine(List<BaseDataInfo> list)
         {
-           
+
             var subList = new List<BaseDataInfo>();
             foreach (var item in list)
             {
-                
+
             }
 
             var linfo = list.GroupBy(x => x.技能组).Select(x => new BaseDataInfo()
@@ -292,7 +292,11 @@ namespace StatsisLib
                 一般 = x.Sum(y => y.一般),
                 总量 = x.Sum(y => y.总量),
                 通过量 = x.Sum(y => y.通过量),
-                 UCount=x.Count()
+                UCount = x.Count()
+                 ,
+                转IVR量 = x.Sum(y => y.转IVR量),
+                转出量 = x.Sum(y => y.转出量),
+                转入量 = x.Sum(y => y.转入量)
                 //gg = 0,
                 // 通过率 = GetRate(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数)),
                 // 满意度系数 = GetFactor(x.Value.Sum(y => y.通过量), x.Value.Sum(y => y.录音抽检数))
@@ -320,25 +324,26 @@ namespace StatsisLib
         public static void Compute(List<BaseDataInfo> list)
         {
             foreach (var item in list)
-            { 
+            {
                 item.T合计接听量 = item.总接听量 + item.C总成功量;
                 item.T满意 = item.C满意 + item.满意;
-                item.T不满意= item.C不满意 + item.不满意;
-                item.T一般=item.C一般 + item.一般;
+                item.T不满意 = item.C不满意 + item.不满意;
+                item.T一般 = item.C一般 + item.一般;
                 item.T总量 = item.T满意 + item.T不满意 + item.T一般;
-                
+
 
                 item.录音抽检数 = item.通过量 + item.中度服务瑕疵量 + item.重大服务失误量;
                 item.通过率 = GetPassRate(item);
 
                 item.客户满意度 = GetSI(item);
-                item.不满意比率= GetUSI(item);
+                item.不满意比率 = GetUSI(item);
                 item.客户评价率 = GetEvalRate(item);
 
                 item.净满意度 = GetJSI(item);
                 item.满意度系数 = GetSII(item);
 
                 item.通过率系数 = GetPII(item);
+
 
             }
         }

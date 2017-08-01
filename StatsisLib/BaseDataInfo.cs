@@ -145,5 +145,9 @@ namespace StatsisLib
 
         public int T总量 { get; set; }
         #endregion
+
+        public int 转入量 { get; set; }//
+        public int 转出量 { get; set; }
+        public int 转IVR量 { get; set; }
     }
 }
