@@ -60,6 +60,7 @@ namespace UnionLib
                 string path = dictParams["tc"].ToString();
                 if (File.Exists(path))
                 {
+                    
                     #region d
 
                     var dataInfos = StatsisLib.Common.DTToList<TCInfo>(NPOIHelper.ImportExceltoDt(path));
