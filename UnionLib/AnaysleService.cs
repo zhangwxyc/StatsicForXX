@@ -170,10 +170,10 @@ namespace UnionLib
             var infos = new List<BaseDataInfo>();
             foreach (var item in dataInfos)
             {
-                if (item.总接听量 == 0 || item.录音抽检数 == 0)
-                {
-                    continue;
-                }
+                //if (item.总接听量 == 0 || item.录音抽检数 == 0)
+                //{
+                //    continue;
+                //}
                 string num = item.工号;
                 if (!string.IsNullOrWhiteSpace(num))
                 {
@@ -199,10 +199,10 @@ namespace UnionLib
             var infos = new List<BaseDataInfo>();
             foreach (var item in dataInfos)
             {
-                if (item.总接听量 == 0 || item.录音抽检数 == 0)
-                {
-                    continue;
-                }
+                //if (item.总接听量 == 0 || item.录音抽检数 == 0)
+                //{
+                //    continue;
+                //}
                 string num = item.工号;
                 if (!string.IsNullOrWhiteSpace(num))
                 {
