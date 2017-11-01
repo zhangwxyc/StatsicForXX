@@ -325,7 +325,7 @@ namespace StatsisLib
         {
             foreach (var item in list)
             {
-                item.T合计接听量 = item.总接听量 + item.C总成功量;
+                item.T合计接听量 = item.总接听量 + item.C总成功量-item.转出量-item.转IVR量;
                 item.T满意 = item.C满意 + item.满意;
                 item.T不满意 = item.C不满意 + item.不满意;
                 item.T一般 = item.C一般 + item.一般;
