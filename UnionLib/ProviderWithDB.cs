@@ -13,7 +13,7 @@ namespace UnionLib
         public NestDirectory GetNestDirectory(object paramsObj)
         {
             NestDirectory root = new NestDirectory() { Name = "Root" };
-            var infos = DBContext.StatsicInfo.Where(x => x.IsDel != 1).ToList();
+            var infos = DBContext.StatsicInfo.Where(x => x.IsDel != 1).OrderBy(x=>x.OrderIndex).ToList();
             foreach (var item in infos)
             {
                 NestDirectory sLine = new NestDirectory() { Name = item.StatsicName };
